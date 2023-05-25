@@ -8,17 +8,19 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TodoTImeTrack.ForegroundTimeTracker.Models;
 
 namespace ForegroundTimeTracker
 {
     public class Arrangement : IArrangement
     {
-        private readonly ITodoRepo _todoRepo;
+        private readonly IWorkFromProcessRepo _todoRepo;
+
         private Queue<WorkFromProcess> _workQueue { get; init; }
-        public Arrangement(ITodoRepo todoRepo)
+        public Arrangement(IWorkFromProcessRepo todoRepo)
         {
             _workQueue = new();
-            this._todoRepo = todoRepo;
+            _todoRepo = todoRepo;
         }
 
         public bool Enqueue(WorkFromProcess process)
@@ -32,16 +34,18 @@ namespace ForegroundTimeTracker
             if (_workQueue.Count < 2) return;
             List<WorkFromProcess> workList = new(_workQueue.Count);
             WorkFromProcess lastWorkFromProcess = default;
-            while (_workQueue.Count > 1)
+            while (_workQueue.TryPeek(out var process) && lastWorkFromProcess?.EndTime.Day == process.EndTime.Day)
             {
-                WorkFromProcess process = _workQueue.Dequeue();
+                process = _workQueue.Dequeue();
                 if (process.Duration < TimeSpan.FromMinutes(5)) continue;
                 if (lastWorkFromProcess.Title == process.Title) continue;
                 lastWorkFromProcess.EndTime = process.StartTime - TimeSpan.FromSeconds(1);
                 workList.Add(lastWorkFromProcess);
                 lastWorkFromProcess = process; 
             }
+            //For test
             OutputResult(workList);
+            await  _todoRepo.PostNewEntriesAsync(workList);
         }
 
         private void OutputResult(List<WorkFromProcess> workList)

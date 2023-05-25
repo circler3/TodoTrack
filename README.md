@@ -2,6 +2,9 @@
 `TodoTrack` is a service which provides Todo management with time consumption logging.
 
 ## Usage
+`TodoTrack` has a console service for Windows only. Run it will collect information of working status.
+
+### WebAPI
 Clone and open `sln` file. Set the api project as start project and run.
 
 ## Initial purpose

@@ -11,7 +11,7 @@ namespace TodoTImeTrack.ForegroundTimeTracker.Models
     {
         public async Task<bool> PostNewEntriesAsync(IEnumerable<WorkFromProcess> workFromProcesses)
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }

@@ -36,7 +36,7 @@ namespace ForegroundTimeTracker
 
                 var currentProcess = ProcessHelper.GetForegroundProcess();
                 if (currentProcess == null || string.IsNullOrWhiteSpace(currentProcess.MainWindowTitle)) { continue; }
-                if (ignoreList.Contains(currentProcess.ProcessName)) 
+                if (ignoreList?.Contains(currentProcess.ProcessName) ?? false) 
                     continue;
 
                 if (_lastProcess == null)
@@ -45,7 +45,7 @@ namespace ForegroundTimeTracker
                     _aggregationWorker.Enqueue(_lastProcess);
                     continue;
                 }
-                if(_lastProcess.ProcessId != currentProcess.Id)
+                if(_lastProcess.ProcessId != currentProcess.Id || DateTimeOffset.Now.TimeOfDay < TimeSpan.FromSeconds(1))
                 {
                     var currentWorkProcess = new WorkFromProcess(currentProcess);
                     _lastProcess.EndTime = DateTimeOffset.Now;

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TodoTImeTrack.ForegroundTimeTracker.Models;
 
 namespace ForegroundTimeTracker
 {
@@ -15,6 +16,7 @@ namespace ForegroundTimeTracker
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<IArrangement, Arrangement>();
+                    services.AddTransient<IWorkFromProcessRepo, WorkFromProcessRepo>();
                     services.AddHostedService<AggregationWorker>();
                     services.AddHostedService<MonitorWorker>();
                 });
