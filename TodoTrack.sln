@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33717.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoTImeTrack.ForegroundTimeTracker", "TodoTImeTrack.ForegroundTimeTracker\TodoTImeTrack.ForegroundTimeTracker.csproj", "{2CD45BD4-6AA5-49C2-80EA-D256C760907C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoTrack.ForegroundTimeTracker", "TodoTrack.ForegroundTimeTracker\TodoTrack.ForegroundTimeTracker.csproj", "{2CD45BD4-6AA5-49C2-80EA-D256C760907C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{3D85E42C-97BE-4F5C-B155-D883D6029ADF}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
