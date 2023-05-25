@@ -1,0 +1,36 @@
+﻿using ForegroundTimeTracker.Models;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace ForegroundTimeTracker
+{
+    public class AggregationWorker : BackgroundService
+    {
+        private readonly IArrangement arrange;
+
+        private Queue<WorkFromProcess> _workQueue { get; init; }
+        public AggregationWorker(IArrangement arrange)
+        {
+            this.arrange = arrange;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                
+                await Task.Delay(60 * 1000);
+                await arrange.ArrangeAsync();
+            }
+        }
+
+
+    }
+}
