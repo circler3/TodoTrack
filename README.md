@@ -2,23 +2,28 @@
 `TodoTrack` is a service which provides Todo management with time consumption logging.
 
 ## Usage
+`TodoTrack` consists of several modules.
+### Console
 `TodoTrack` has a console service for Windows only. Run it will collect information of working status.
 
-### WebAPI
+### WebAPI(no available yet)
 Clone and open `sln` file. Set the api project as start project and run.
 
 ## Initial purpose
 I like to use todo apps to manage my work and life. *Microsoft To-do* provides system-level integration and WebAPI interface. But it cannot track time. *shiguangxu* can track time consumption. However it lacks PC features. So I want to build a multi-platform Todo app which is capable of logging time.
 
-## Core backlogs
+## Core features
 There are several core backlogs of `TodoTrack`:
-[] Todo management
-[] Time consumption logging.
-[] Data Export feature
-[] Data interface (OData)
+[x] Foreground process based time consumption logging.
+[ ] Automatically matching Todo items with working period.
+[ ] Todo management.
+[ ] Time consumption statistic.
+[ ] Data Export feature.
+[ ] Open data interface (OData).
 
-## Features
-[] Basic management
+## Backlogs
+[x] Foreground process based time consumption logging.
+[ ] Basic management
 
 ## Design
 I use WebAPI to expose system service. `ABP vNext`, `OData`, `MongoDB` are used.

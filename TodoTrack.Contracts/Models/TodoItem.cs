@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Net.Http.Headers;
 
-namespace ForegroundTimeTracker.Models
+namespace TodoTrack.Contracts
 {
     public class TodoItem
     {
@@ -18,5 +18,6 @@ namespace ForegroundTimeTracker.Models
         public virtual IEnumerable<string>? Tags { get; set; }
         [NotMapped]
         public virtual IEnumerable<string>? ProcessMatchKeys { get; set; }
+        public virtual IEnumerable<WorkPeriod> WorkPeriods { get; set; } 
     }
 }

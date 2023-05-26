@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ForegroundTimeTracker.Models
+namespace TodoTrack.Contracts
 {
     public interface ITodoRepo
     {
-        IList<TodoItem> GetTodayTodoItemsAsync();
-        TodoItem GetCurrentTodoItemAsync();
+        ValueTask<IList<TodoItem>> GetTodayTodoItemsAsync();
+        ValueTask<TodoItem> GetCurrentTodoItemAsync();
         bool UpdateAsync(TodoItem item);
     }
 }

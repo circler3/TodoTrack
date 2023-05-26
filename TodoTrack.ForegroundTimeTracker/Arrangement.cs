@@ -1,25 +1,22 @@
 ﻿using ForegroundTimeTracker.Models;
-using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using TodoTImeTrack.ForegroundTimeTracker.Models;
+using TodoTrack.Contracts;
 
 namespace ForegroundTimeTracker
 {
     public class Arrangement : IArrangement
     {
-        private readonly IWorkFromProcessRepo _todoRepo;
+        private readonly IWorkFromProcessRepo _workFromProcessRepo;
+        private readonly ITodoRepo _todoRepo;
 
         private Queue<WorkFromProcess> _workQueue { get; init; }
-        public Arrangement(IWorkFromProcessRepo todoRepo)
+        public Arrangement(IWorkFromProcessRepo workFromProcessRepo, ITodoRepo todoRepo)
         {
             _workQueue = new();
+            _workFromProcessRepo = workFromProcessRepo;
             _todoRepo = todoRepo;
         }
 
@@ -41,18 +38,20 @@ namespace ForegroundTimeTracker
                 if (lastWorkFromProcess.Title == process.Title) continue;
                 lastWorkFromProcess.EndTime = process.StartTime - TimeSpan.FromSeconds(1);
                 workList.Add(lastWorkFromProcess);
-                lastWorkFromProcess = process; 
+                lastWorkFromProcess = process;
             }
             //For test
-            OutputResult(workList);
-            await  _todoRepo.PostNewEntriesAsync(workList);
+            TestOutputResult(workList);
+            await _workFromProcessRepo.PostNewEntriesAsync(workList);
+            //TODO: Todo management is server side only
+            //Match(workList, await _todoRepo.GetTodayTodoItemsAsync(), await _todoRepo.GetCurrentTodoItemAsync());
         }
 
-        private void OutputResult(List<WorkFromProcess> workList)
+        private void TestOutputResult(List<WorkFromProcess> workList)
         {
             Console.WriteLine("*****");
             Console.WriteLine("Writing Results:");
-            workList.ForEach(work=> Console.WriteLine(work.Title + $":{work.Duration.TotalMinutes} min."));
+            workList.ForEach(work => Console.WriteLine(work.Title + $":{work.Duration.TotalMinutes} min."));
             Console.WriteLine("*****");
         }
     }
