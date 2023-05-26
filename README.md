@@ -14,16 +14,16 @@ I like to use todo apps to manage my work and life. *Microsoft To-do* provides s
 
 ## Core features
 There are several core backlogs of `TodoTrack`:
-[x] Foreground process based time consumption logging.
-[ ] Automatically matching Todo items with working period.
-[ ] Todo management.
-[ ] Time consumption statistic.
-[ ] Data Export feature.
-[ ] Open data interface (OData).
+- [x] Foreground process based time consumption logging.
+- [ ] Automatically matching Todo items with working period.
+- [ ] Todo management.
+- [ ] Time consumption statistic.
+- [ ] Data Export feature.
+- [ ] Open data interface (OData).
 
 ## Backlogs
-[x] Foreground process based time consumption logging.
-[ ] Basic management
+- [x] Foreground process based time consumption logging.
+- [ ] Basic management
 
 ## Design
 I use WebAPI to expose system service. `ABP vNext`, `OData`, `MongoDB` are used.
