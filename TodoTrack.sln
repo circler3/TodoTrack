@@ -7,10 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoTrack.ForegroundTimeTra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{3D85E42C-97BE-4F5C-B155-D883D6029ADF}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoTrack.Contracts", "TodoTrack.Contracts\TodoTrack.Contracts.csproj", "{6994B998-0448-48BE-B73C-4FDC3EAB3074}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoTrack.Contracts", "TodoTrack.Contracts\TodoTrack.Contracts.csproj", "{6994B998-0448-48BE-B73C-4FDC3EAB3074}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

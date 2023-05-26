@@ -6,7 +6,7 @@
 ### Console
 `TodoTrack` has a console service for Windows only. Run it will collect information of working status.
 
-### WebAPI(no available yet)
+### WebAPI (not available yet)
 Clone and open `sln` file. Set the api project as start project and run.
 
 ## Initial purpose
