@@ -14,10 +14,10 @@ namespace ForegroundTimeTracker.Utils
             return Process.GetProcessById(pid);
         }
 
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
 
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        [DllImport("user32.dll")]
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
     }
 }

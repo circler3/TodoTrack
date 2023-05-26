@@ -1,0 +1,43 @@
+{
+  "RegisteredProcess": [
+    {
+      "Name": "Feishu",
+      "ProcessName": "Feishu",
+      "Keys": [
+        "Work"
+      ]
+    },
+    {
+      "Name": "WeChat",
+      "ProcessName": "WeChat",
+      "Keys": [
+        "Work",
+        "Rest"
+      ]
+    },
+    {
+      "Name": "Visual Studio",
+      "ProcessName": "devenv",
+      "Keys": [
+        "Work",
+        "Development"
+      ]
+    },
+    {
+      "Name": "navicat",
+      "ProcessName": "navicat",
+      "Keys": [
+        "Work",
+        "Development"
+      ]
+    },
+    {
+      "Name": "Code",
+      "ProcessName": "Code",
+      "Keys": [
+        "Work",
+        "Development"
+      ]
+    }
+  ]
+}

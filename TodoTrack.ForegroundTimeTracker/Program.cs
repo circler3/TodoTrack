@@ -1,8 +1,9 @@
-using ForegroundTimeTracker.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TodoTImeTrack.ForegroundTimeTracker.Models;
 using TodoTrack.Contracts;
+using TodoTrack.ForegroundTimeTracker;
 using TodoTrack.ForegroundTimeTracker.Models;
 
 namespace ForegroundTimeTracker
@@ -18,6 +19,10 @@ namespace ForegroundTimeTracker
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddDbContext<SqliteDbContext>(options=>
+                    {
+                        options.UseSqlite("Data Source=test.db");
+                    });
                     services.AddSingleton<IArrangement, Arrangement>();
                     services.AddSingleton<ITodoRepo, TodoRepo>();
                     services.AddTransient<IWorkFromProcessRepo, WorkFromProcessRepo>();

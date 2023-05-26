@@ -1,6 +1,8 @@
 ﻿using ForegroundTimeTracker.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using TodoTImeTrack.ForegroundTimeTracker.Models;
 using TodoTrack.Contracts;
@@ -28,15 +30,28 @@ namespace ForegroundTimeTracker
 
         public async Task ArrangeAsync()
         {
-            if (_workQueue.Count < 2) return;
+            if (_workQueue.Count < 5) return;
             List<WorkFromProcess> workList = new(_workQueue.Count);
-            WorkFromProcess lastWorkFromProcess = default;
-            while (_workQueue.TryPeek(out var process) && lastWorkFromProcess?.EndTime.Day == process.EndTime.Day)
+            WorkFromProcess lastWorkFromProcess = _workQueue.Dequeue();
+            while (_workQueue.Count > 2)
             {
-                process = _workQueue.Dequeue();
-                if (process.Duration < TimeSpan.FromMinutes(5)) continue;
+                var process = _workQueue.Dequeue();
+                if (DateTimeOffset.FromUnixTimeSeconds(lastWorkFromProcess.EndTimestamp).Day != DateTimeOffset.FromUnixTimeSeconds(lastWorkFromProcess.StartTimestamp).Day)
+                {
+                    // additional workitem generate. split it into two individual units.
+                    // duplicate last item.
+                    var newLastWorkFromProcess = new WorkFromProcess(lastWorkFromProcess)
+                    {
+                        StartTimestamp = ((DateTimeOffset)DateTimeOffset.FromUnixTimeSeconds(lastWorkFromProcess.EndTimestamp).Date).ToUnixTimeSeconds()
+                    };
+                    // endtimestamp at next day 00:00:00
+                    lastWorkFromProcess.EndTimestamp = ((DateTimeOffset)DateTimeOffset.FromUnixTimeSeconds(lastWorkFromProcess.StartTimestamp).AddDays(1).Date).ToUnixTimeSeconds();
+                    workList.Add(lastWorkFromProcess);
+                    lastWorkFromProcess = newLastWorkFromProcess;
+                }
                 if (lastWorkFromProcess.Title == process.Title) continue;
-                lastWorkFromProcess.EndTime = process.StartTime - TimeSpan.FromSeconds(1);
+                lastWorkFromProcess.EndTimestamp = process.StartTimestamp;
+                //if (process.Duration < TimeSpan.FromMinutes(5)) continue;
                 workList.Add(lastWorkFromProcess);
                 lastWorkFromProcess = process;
             }
@@ -49,6 +64,7 @@ namespace ForegroundTimeTracker
 
         private void TestOutputResult(List<WorkFromProcess> workList)
         {
+            Console.Clear();
             Console.WriteLine("*****");
             Console.WriteLine("Writing Results:");
             workList.ForEach(work => Console.WriteLine(work.Title + $":{work.Duration.TotalMinutes} min."));

@@ -2,7 +2,7 @@
 {
     public class WorkPeriod
     {
-        public DateTimeOffset StartTime { get; set; }
-        public DateTimeOffset EndTime { get; set; }
+        public long StartTimestamp { get; set; }
+        public long EndTimestamp { get; set; }
     }
 }

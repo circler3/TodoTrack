@@ -8,18 +8,19 @@ namespace ForegroundTimeTracker.Models
 {
     public class WorkFromProcess
     {
+        //TODO: USE ABP ID generator to produce predictable Ids.
         [Key]
-        public string Id { get; init; }
+        public string Id { get; init; } = Guid.NewGuid().ToString();
         [NotMapped]
         public int ProcessId { get; init; }
         public string ProcessName { get; init; }
         public string Title { get; init; }
-        public DateTimeOffset StartTime { get; init; }
-        public DateTimeOffset EndTime { get; set; }
+        public long StartTimestamp { get; set; } 
+        public long EndTimestamp { get; set; }
         [NotMapped]
-        public TimeSpan Duration => EndTime - StartTime;
+        public TimeSpan Duration => TimeSpan.FromSeconds(EndTimestamp - StartTimestamp);
         //TODO: Friendly to ORM.
-        public List<DateTimeOffset> IdlePeriods { get; init; }
+        public List<long> IdlePeriods { get; init; }
         protected WorkFromProcess()
         {
 
@@ -29,8 +30,19 @@ namespace ForegroundTimeTracker.Models
             ProcessId = process.Id;
             ProcessName = process.ProcessName;
             Title = process.MainWindowTitle;
-            StartTime = DateTimeOffset.Now;
-            IdlePeriods = new List<DateTimeOffset>();
+            StartTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+            EndTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+            IdlePeriods = new List<long>();
+        }
+
+        public WorkFromProcess(WorkFromProcess process)
+        {
+            ProcessId = process.ProcessId;
+            ProcessName = process.ProcessName;
+            Title = process.Title;
+            StartTimestamp = process.StartTimestamp;
+            EndTimestamp = process.EndTimestamp;
+            IdlePeriods = new List<long>();
         }
     }
 }

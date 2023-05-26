@@ -48,12 +48,12 @@ namespace ForegroundTimeTracker
                 if(_lastProcess.ProcessId != currentProcess.Id || DateTimeOffset.Now.TimeOfDay < TimeSpan.FromSeconds(1))
                 {
                     var currentWorkProcess = new WorkFromProcess(currentProcess);
-                    _lastProcess.EndTime = DateTimeOffset.Now;
+                    _lastProcess.EndTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
                     await Console.Out.WriteLineAsync($"Switch to { currentWorkProcess.Title} from {_lastProcess.Title}");
                     _aggregationWorker.Enqueue(currentWorkProcess);
                     _lastProcess = currentWorkProcess;
                 }
-                if (IdleDetectHelper.GetIdleTime() > TimeSpan.FromMinutes(5)) _lastProcess.IdlePeriods.Add(DateTimeOffset.Now);
+                if (IdleDetectHelper.GetIdleTime() > TimeSpan.FromMinutes(5)) _lastProcess.IdlePeriods.Add(DateTimeOffset.Now.ToUnixTimeSeconds());
             }
         }
     }
