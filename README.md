@@ -1,13 +1,22 @@
 # TodoTrack
 `TodoTrack` is a service which provides Todo management with time consumption logging.
 
-## Usage
-`TodoTrack` consists of several modules.
-### Console
-`TodoTrack` has a console service for Windows only. Run it will collect information of working status.
+## Summary
+`TodoTrack` consists of several modules. 
+### Foreground time track (alpha)
+`TodoTrack` has a console service for Windows only. It logs the application you are using in foreground. 
 
+Run it will collect information of working status. Sqlite is used for alpha stage. Make sure the data destination is 100% trusted.
+ 
 ### WebAPI (not available yet)
+Core service handles all Todo items and work time units. 
+
 Clone and open `sln` file. Set the api project as start project and run.
+
+### Pomotodo (not available yet)
+Offers Pomotodo approach which deal with fixed period work unit. It can help with scheduled work and rest time for healthier habits. However system does not collect Pomotodo statistics currently.
+
+Run it will open a windows prompts for Todo items and work time unit. Start and enjoy.
 
 ## Initial purpose
 I like to use todo apps to manage my work and life. *Microsoft To-do* provides system-level integration and WebAPI interface. But it cannot track time. *shiguangxu* can track time consumption. However it lacks PC features. So I want to build a multi-platform Todo app which is capable of logging time.
@@ -26,7 +35,7 @@ There are several core backlogs of `TodoTrack`:
 - [ ] Basic management
 
 ## Design
-I use WebAPI to expose system service. `ABP vNext`, `OData`, `MongoDB` are used.
+I use WebAPI to expose system service. `ABP vNext`, `OData`, `MongoDB` are used. Currently console and window application support Windows only.
 
 > Design may change over time.
 
@@ -38,4 +47,6 @@ I use WebAPI to expose system service. `ABP vNext`, `OData`, `MongoDB` are used.
 I am not skilled in `FE` technologies. So currently I build a simple console app to use it. If you are interested in building FE part (Web/Mobile/PC/MAC), please start a PR of your own implementation. 
 
 ## Disclaimer
-This project is currently alpha stage. Everything can change at anytime. Backup data!
+This project is currently at alpha stage. Anything can change at anytime. Backup data often and write migration code to help you with breaking changes.
+
+
