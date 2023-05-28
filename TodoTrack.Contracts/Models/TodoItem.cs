@@ -10,7 +10,7 @@ namespace TodoTrack.Contracts
     public class TodoItem
     {
         [Key]
-        public virtual string Id { get; init; }
+        public virtual string Id { get; init; } = string.Empty;
         public virtual required string Name { get; set; }
         public virtual string? Description { get; set; }
         public virtual string? Comment { get; set; }

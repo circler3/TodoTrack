@@ -19,7 +19,7 @@ namespace ForegroundTimeTracker
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddDbContext<SqliteDbContext>(options=>
+                    services.AddDbContext<SQLiteDbContext>(options=>
                     {
                         options.UseSqlite("Data Source=test.db");
                     });

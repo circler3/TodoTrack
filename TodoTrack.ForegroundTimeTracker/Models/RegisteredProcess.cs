@@ -10,7 +10,7 @@ namespace ForegroundTimeTracker.Models
     {
         public string Name { get; init; } = "";
         public string ProcessName { get; init; } = "";
-        public IEnumerable<string> Keys { get; init; }
+        public IEnumerable<string>? Keys { get; init; }
         public IList<string> GetWorkFromProcessName(string title)
         {
             return  title.Split(" - ");

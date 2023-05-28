@@ -15,14 +15,12 @@ namespace ForegroundTimeTracker
 {
     public class MonitorWorker : BackgroundService
     {
-        private readonly ILogger<MonitorWorker> _logger;
         private readonly IConfiguration _configuration;
         private readonly IArrangement _aggregationWorker;
-        private WorkFromProcess _lastProcess;
+        private WorkFromProcess? _lastProcess;
 
-        public MonitorWorker(ILogger<MonitorWorker> logger, IConfiguration configuration, IArrangement aggregationWorker)
+        public MonitorWorker(IConfiguration configuration, IArrangement aggregationWorker)
         {
-            _logger = logger;
             _configuration = configuration;
             this._aggregationWorker = aggregationWorker;
         }
@@ -53,7 +51,7 @@ namespace ForegroundTimeTracker
                     _aggregationWorker.Enqueue(currentWorkProcess);
                     _lastProcess = currentWorkProcess;
                 }
-                if (IdleDetectHelper.GetIdleTime() > TimeSpan.FromMinutes(5)) _lastProcess.IdlePeriods.Add(DateTimeOffset.Now.ToUnixTimeSeconds());
+                if (IdleDetectHelper.GetIdleTime() > TimeSpan.FromMinutes(5)) _lastProcess?.IdlePeriods?.Add(DateTimeOffset.Now.ToUnixTimeSeconds());
             }
         }
     }

@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace TodoTrack.ForegroundTimeTracker
 {
-    public class SqliteDbContext : DbContext
+    public class SQLiteDbContext : DbContext
     {
-        public SqliteDbContext(DbContextOptions<SqliteDbContext> options)
+        public SQLiteDbContext(DbContextOptions<SQLiteDbContext> options)
             : base(options)
         {
 

@@ -12,18 +12,18 @@ namespace TodoTrack.ForegroundTimeTracker.Models
     {
         public async ValueTask<TodoItem> GetCurrentTodoItemAsync()
         {
-            return new TodoItem { Name = "Test" };
+            return await ValueTask.FromResult(new TodoItem { Name = "Test" });
         }
 
         public async ValueTask<IList<TodoItem>> GetTodayTodoItemsAsync()
         {
-            return new[] { new TodoItem { Name = "Test1" },
+            return await ValueTask.FromResult( new[] { new TodoItem { Name = "Test1" },
                 new TodoItem { Name = "Test2" },
                  new TodoItem { Name = "Test3" },
                   new TodoItem { Name = "Test4" },
                    new TodoItem { Name = "Test5" },
                    new TodoItem { Name = "Test6" }
-            };
+            });
         }
 
         public bool UpdateAsync(TodoItem item)

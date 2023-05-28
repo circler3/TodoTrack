@@ -8,6 +8,12 @@ namespace ForegroundTimeTracker.Models
 {
     public class WorkFromProcess
     {
+#nullable disable
+        protected WorkFromProcess()
+        {
+            // For ORM ONLY
+        }
+#nullable enable
         //TODO: USE ABP ID generator to produce predictable Ids.
         [Key]
         public string Id { get; init; } = Guid.NewGuid().ToString();
@@ -21,10 +27,6 @@ namespace ForegroundTimeTracker.Models
         public TimeSpan Duration => TimeSpan.FromSeconds(EndTimestamp - StartTimestamp);
         //TODO: Friendly to ORM.
         public List<long> IdlePeriods { get; init; }
-        protected WorkFromProcess()
-        {
-
-        }
         public WorkFromProcess(Process process)
         {
             ProcessId = process.Id;

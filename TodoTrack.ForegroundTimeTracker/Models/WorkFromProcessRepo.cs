@@ -10,9 +10,9 @@ namespace TodoTImeTrack.ForegroundTimeTracker.Models
 {
     public class WorkFromProcessRepo : IWorkFromProcessRepo
     {
-        private readonly SqliteDbContext _context;
+        private readonly SQLiteDbContext _context;
 
-        public WorkFromProcessRepo(SqliteDbContext context)
+        public WorkFromProcessRepo(SQLiteDbContext context)
         {
             _context = context;
         }

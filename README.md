@@ -14,12 +14,12 @@ Core service handles all Todo items and work time units.
 Clone and open `sln` file. Set the api project as start project and run.
 
 ### Pomodoro (not available yet)
-Offers Pomodoro approach which deal with fixed period work unit. It can help with scheduled work and rest time for healthier habits. However system does not collect Pomotodo statistics currently.
+Offers Pomodoro approach which deal with fixed period work unit. It can help with scheduled work and rest time for healthier habits. However system does not collect Pomodoro statistics currently.
 
 Run it will open a windows prompts for Todo items and work time unit. Start and enjoy.
 
 ## Initial purpose
-I like to use todo apps to manage my work and life. *Microsoft To-do* provides system-level integration and WebAPI interface. But it cannot track time. *shiguangxu* can track time consumption. However it lacks PC features. So I want to build a multi-platform Todo app which is capable of logging time.
+I like to use todo apps to manage my work and life. *Microsoft To-do* provides system-level integration and WebAPI interface. But it cannot track time. `*shiguangxu*` can track time consumption. However it lacks PC features. So I want to build a multi-platform Todo app which is capable of logging time.
 
 ## Core features
 There are several core backlogs of `TodoTrack`:
