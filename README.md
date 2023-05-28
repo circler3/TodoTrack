@@ -1,5 +1,5 @@
 # TodoTrack
-`TodoTrack` is a service which provides Todo management with time consumption logging.
+`TodoTrack` provides Todo management with automatic time consumption logging via foreground process analysis.
 
 ## Summary
 `TodoTrack` consists of several modules. 
@@ -7,7 +7,10 @@
 `TodoTrack` has a console service for Windows only. It logs the application you are using in foreground. 
 
 Run it will collect information of working status. SQLite is used for alpha stage. Make sure the data destination is 100% trusted.
- 
+
+### TodoTrack CLI
+A console cli tool can help deal with simple todo task management. It is used when GUI apps are not ready.
+
 ### WebAPI (not available yet)
 Core service handles all Todo items and work time units. 
 
@@ -26,13 +29,13 @@ There are several core backlogs of `TodoTrack`:
 - [x] Foreground process based time consumption logging.
 - [ ] Automatically matching Todo items with working period.
 - [ ] Todo management.
+- [ ] Open data interface (OData).
 - [ ] Time consumption statistic.
 - [ ] Data Export feature.
-- [ ] Open data interface (OData).
 
 ## Backlogs
 - [x] Foreground process based time consumption logging.
-- [ ] Basic management
+- [ ] Basic Todo management
 
 ## Design
 I use WebAPI to expose system service. `ABP vNext`, `OData`, `MongoDB` are used. Currently console and window application support Windows only.
