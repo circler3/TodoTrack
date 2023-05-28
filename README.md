@@ -6,15 +6,15 @@
 ### Foreground time track (alpha)
 `TodoTrack` has a console service for Windows only. It logs the application you are using in foreground. 
 
-Run it will collect information of working status. Sqlite is used for alpha stage. Make sure the data destination is 100% trusted.
+Run it will collect information of working status. SQLite is used for alpha stage. Make sure the data destination is 100% trusted.
  
 ### WebAPI (not available yet)
 Core service handles all Todo items and work time units. 
 
 Clone and open `sln` file. Set the api project as start project and run.
 
-### Pomotodo (not available yet)
-Offers Pomotodo approach which deal with fixed period work unit. It can help with scheduled work and rest time for healthier habits. However system does not collect Pomotodo statistics currently.
+### Pomodoro (not available yet)
+Offers Pomodoro approach which deal with fixed period work unit. It can help with scheduled work and rest time for healthier habits. However system does not collect Pomotodo statistics currently.
 
 Run it will open a windows prompts for Todo items and work time unit. Start and enjoy.
 
