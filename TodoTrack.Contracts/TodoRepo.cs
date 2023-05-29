@@ -1,12 +1,6 @@
-﻿using ForegroundTimeTracker.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TodoTrack.Contracts;
+﻿using TodoTrack.Contracts;
 
-namespace TodoTrack.ForegroundTimeTracker.Models
+namespace TodoTrack.Contracts
 {
     public class TodoRepo : ITodoRepo
     {
@@ -29,6 +23,16 @@ namespace TodoTrack.ForegroundTimeTracker.Models
         public bool UpdateAsync(TodoItem item)
         {
             return true;
+        }
+
+        Task<TodoItem> ITodoRepo.CreateTodoItemAsync(TodoItem item)
+        {
+            throw new NotImplementedException();
+        }
+
+        Project? ITodoRepo.GetPrjectFromName(string value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

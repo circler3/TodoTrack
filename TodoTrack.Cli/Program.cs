@@ -1,10 +1,33 @@
-﻿namespace TodoTrack.Cli
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Spectre.Console.Cli;
+using TodoTrack.Cli.Commands;
+using TodoTrack.Contracts;
+
+namespace TodoTrack.Cli
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            CreateHostBuilder(args).Build().Run();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+    Host.CreateDefaultBuilder(args)
+        .ConfigureServices((hostContext, services) =>
+        {
+            services.AddCommandParser(options=>
+            {
+                options.AddCommand<AddTodoCommand>("add");
+                options.AddCommand<AddTodoCommand>("new");
+                options.AddCommand<AddTodoCommand>("del");
+                options.AddCommand<AddTodoCommand>("start");
+                options.AddCommand<AddTodoCommand>("finish");
+                options.AddCommand<AddTodoCommand>("stop");
+                options.AddCommand<AddTodoCommand>("remove");
+            });  
+            services.AddHostedService<TodoCommandService>();
+        });
     }
 }

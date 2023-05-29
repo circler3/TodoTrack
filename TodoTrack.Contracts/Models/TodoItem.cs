@@ -11,13 +11,13 @@ namespace TodoTrack.Contracts
     {
         [Key]
         public virtual string Id { get; init; } = string.Empty;
-        public virtual required string Name { get; set; }
+        public virtual string Name { get; set; } = string.Empty;
         public virtual string? Description { get; set; }
         public virtual string? Comment { get; set; }
         public virtual Project? Project { get; set; }
-        public virtual IEnumerable<Category>? Categories { get; set; }
-        public virtual IEnumerable<string>? Tags { get; set; }
-        public virtual IEnumerable<TodoItem>? SubTodoItems { get; set; }
+        public virtual ICollection<Category>? Categories { get; set; }
+        public virtual ICollection<string> Tags { get; set; } = new List<string>();
+        public virtual ICollection<TodoItem>? SubTodoItems { get; set; }
         public virtual long? CreatedTimestamp { get; set; }
         public virtual long? FinishedTimestamp { get; set; }
         public virtual long? ScheduledBeginTimestamp { get; set; }
@@ -28,8 +28,18 @@ namespace TodoTrack.Contracts
         public virtual bool Repeatable { get; set; } = false;
         public virtual TodoStatus Status { get; set; }
         public virtual EisenhowerMatrix Priority { get; set; }
-        public virtual IEnumerable<string>? MatchKeys { get; set; }
-        public virtual IEnumerable<WorkPeriod>? WorkPeriods { get; set; } 
-        public virtual IEnumerable<Attachment>? Attachments { get; set; } 
+        public virtual ICollection<string> MatchKeys { get; set; } = new List<string>();
+        public virtual ICollection<WorkPeriod>? WorkPeriods { get; set; } 
+        public virtual ICollection<Attachment>? Attachments { get; set; }
+
+        public static bool TryParse(string? todoBuildString, out TodoItem? item)
+        {
+            item = default;
+            if (string.IsNullOrWhiteSpace(todoBuildString))
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

@@ -11,5 +11,7 @@ namespace TodoTrack.Contracts
         ValueTask<IList<TodoItem>> GetTodayTodoItemsAsync();
         ValueTask<TodoItem> GetCurrentTodoItemAsync();
         bool UpdateAsync(TodoItem item);
+        Project? GetPrjectFromName(string value);
+        Task<TodoItem> CreateTodoItemAsync(TodoItem item);
     }
 }

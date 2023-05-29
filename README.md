@@ -16,7 +16,7 @@ Core service handles all Todo items and work time units.
 
 Clone and open `sln` file. Set the api project as start project and run.
 
-### Pomodoro (not available yet)
+### GUI apps with Pomodoro support (not available yet)
 Offers Pomodoro approach which deal with fixed period work unit. It can help with scheduled work and rest time for healthier habits. However system does not collect Pomodoro statistics currently.
 
 Run it will open a windows prompts for Todo items and work time unit. Start and enjoy.

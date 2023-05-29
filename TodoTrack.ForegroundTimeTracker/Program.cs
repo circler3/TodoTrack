@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using TodoTImeTrack.ForegroundTimeTracker.Models;
 using TodoTrack.Contracts;
 using TodoTrack.ForegroundTimeTracker;
-using TodoTrack.ForegroundTimeTracker.Models;
 
 namespace ForegroundTimeTracker
 {
