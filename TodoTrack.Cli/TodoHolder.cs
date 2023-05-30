@@ -23,11 +23,13 @@ namespace TodoTrack.Cli
                 .OrderByDescending(w=>w.ScheduledDueTimestamp).Select(w=> mapper.Map<IndexedTodoItem>(w)));
         }
 
+        internal List<IndexedTodoItem> TodoItems => _todoItems;
+
         internal async Task<IndexedTodoItem> CreateTodoItemAsync(TodoItem item)
         {
             var todo = await _todoRepo.CreateTodoItemAsync(item);
             var iTodo = _mapper.Map<IndexedTodoItem>(todo);
-            _todoItems.Add(iTodo);
+            TodoItems.Add(iTodo);
             return iTodo;
         }
 
@@ -38,7 +40,7 @@ namespace TodoTrack.Cli
 
         internal void SetFocus(IndexedTodoItem todo)
         {
-            foreach (var item in _todoItems)
+            foreach (var item in TodoItems)
             {
                 if(todo.Id == item.Id) item.IsFocus = true;
                 else item.IsFocus = false;
