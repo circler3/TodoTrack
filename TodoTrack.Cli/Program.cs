@@ -35,7 +35,7 @@ namespace TodoTrack.Cli
                 options.CreateMap<TodoItem, IndexedTodoItem>();
             });
             services.AddTransient<ITodoRepo, TodoSourceRepo>();
-            services.AddTransient<TodoHolder>();
+            services.AddSingleton<TodoHolder>();
 
 
             services.AddHostedService<TodoCommandService>();

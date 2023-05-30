@@ -81,7 +81,7 @@ namespace TodoTrack.Cli.Commands
                     item.Status = TodoStatus.InProgress;
                 }
                 var todo = await _todoHolder.CreateTodoItemAsync(item);
-                if (instantFlag) _todoHolder.SetFocus(todo.Id);
+                if (instantFlag) _todoHolder.SetFocusAsync(todo.Id);
             }
             catch (Exception e)
             {

@@ -29,7 +29,7 @@ namespace TodoTrack.Cli
         {
             get
             {
-                SetFocus(_focusId);
+                SetFocusAsync(_focusId);
                 return _todoItems;
             }
         }
@@ -47,13 +47,18 @@ namespace TodoTrack.Cli
             return await _todoRepo.GetProjectFromNameAsync(value);
         }
 
-        internal void SetFocus(string todoId)
+        internal async void SetFocusAsync(string todoId)
         {
             foreach (var item in _todoItems)
             {
                 if (todoId == item.Id)
                 {
                     item.IsFocus = true;
+                    if (_focusId != item.Id)
+                    {
+                        item.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
+                        await UpdateTodoItemAsync(item);
+                    }
                     _focusId = item.Id;
                 }
                 else
@@ -61,14 +66,28 @@ namespace TodoTrack.Cli
             }
         }
 
-        internal async void DeleteTodoItemAsync(IList<int> deleteIds)
+        private async Task UpdateTodoItemAsync(IndexedTodoItem item)
         {
-            var sorted = deleteIds.OrderDescending();
-            for (var i = deleteIds.Count - 1; i >= 0; i--)
+            await _todoRepo.UpdateTodoItemAsync(item.Id, item);
+        }
+
+        internal async Task DeleteTodoItemAsync(IList<int> deleteIndex)
+        {
+            var sorted = deleteIndex.OrderDescending();
+            for (var i = deleteIndex.Count - 1; i >= 0; i--)
             {
-                if (_todoItems.Count <= deleteIds[i]) continue;
-                await _todoRepo.DeleteTodoItemAsync(_todoItems[deleteIds[i]].Id);
-                _todoItems.RemoveAt(deleteIds[i]);
+                if (_todoItems.Count <= deleteIndex[i]) continue;
+                await _todoRepo.DeleteTodoItemAsync(_todoItems[deleteIndex[i]].Id);
+                _todoItems.RemoveAt(deleteIndex[i]);
+            }
+        }
+
+        internal async Task DeleteTodoItemAsync(IEnumerable<string> deleteIds)
+        {
+            foreach (var item in deleteIds)
+            {
+                await _todoRepo.DeleteTodoItemAsync(item);
+                _todoItems.Remove(_todoItems.Single(w=>w.Id == item));
             }
         }
 

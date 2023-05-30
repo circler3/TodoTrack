@@ -8,7 +8,7 @@
 
 Run it will collect information of working status. SQLite is used for alpha stage. Make sure the data destination is 100% trusted.
 
-### TodoTrack CLI
+### TodoTrack CLI (alpha)
 A console cli tool can help deal with simple todo task management. It is used when GUI apps are not ready.
 
 ### WebAPI (not available yet)

@@ -25,6 +25,7 @@ namespace TodoTrack.Contracts
         public virtual long? FinishedTimestamp { get; set; }
         public virtual long? ScheduledBeginTimestamp { get; set; }
         public virtual long? ScheduledDueTimestamp { get; set; }
+        public virtual long? LatestWorkTimestamp { get; set; }
         [NotMapped]
         public virtual IList<long>? NotifyTimestamp { get; set; }
         public virtual long? EstimatedDuration { get; set; }

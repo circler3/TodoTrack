@@ -31,7 +31,6 @@ namespace TodoTrack.Cli.Commands
 
             try
             {
-                List<int> index = new();
                 if (todoIdToDelete.Length == 1 && !int.TryParse(todoIdToDelete[0], out var _))
                 {
                     var range = GetRange(command);
@@ -40,10 +39,12 @@ namespace TodoTrack.Cli.Commands
                         await Console.Out.WriteLineAsync("Invalid range string.");
                         return -1;
                     }
-                    for (int i = range.Value.Start.Value; i < range.Value.End.Value; i++) index.Add(i);
+                    var t = _todoHolder.TodoItems.ToArray()[range.Value].Select(w => w.Id);
+                    await _todoHolder.DeleteTodoItemAsync(t);
                 }
                 else
                 {
+                    List<int> index = new();
                     foreach (var item in todoIdToDelete)
                     {
                         if (int.TryParse(item, out var result))
@@ -51,8 +52,8 @@ namespace TodoTrack.Cli.Commands
                             index.Add(result);
                         }
                     }
+                    await _todoHolder.DeleteTodoItemAsync(index);
                 }
-                _todoHolder.DeleteTodoItemAsync(index);
             }
             catch (Exception e)
             {

@@ -1,6 +1,8 @@
-﻿namespace TodoTrack.Cli
+﻿using Microsoft.EntityFrameworkCore.Storage;
+
+namespace TodoTrack.Cli
 {
-    internal class TimestampHelper
+    public class TimestampHelper
     {
         internal static long CurrentDateStamp => DateTimeOffset.Now.ToUnixTimeSeconds();
         internal static long? GetDurationFromString(string timeString)
@@ -25,6 +27,12 @@
                 "d" => (long?)(numericValue * 24 * 60 * 60),
                 _ => throw new ArgumentException("Invalid time unit: " + unitPart),
             };
+        }
+
+        public static long GetTodayUnixTimestamp()
+        {
+            var time = DateTimeOffset.Now;
+            return time.ToOffset(-time.TimeOfDay).ToUnixTimeSeconds();
         }
     }
 }

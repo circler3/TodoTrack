@@ -49,9 +49,13 @@ namespace TodoTrack.TodoDataSource
             return true;
         }
 
-        public Task<bool> UpdateTodoItemAsync(string id, TodoItem item)
+        public async Task<bool> UpdateTodoItemAsync(string id, TodoItem item)
         {
-            throw new NotImplementedException();
+            var target = _dbContext.TodoItems.Find(id);
+            if (target == null) return false;
+            _dbContext.Entry(target).CurrentValues.SetValues(item);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }
