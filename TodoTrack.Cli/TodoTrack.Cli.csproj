@@ -8,12 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="automapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.47.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TodoTrack.Contracts\TodoTrack.Contracts.csproj" />
+    <ProjectReference Include="..\TodoTrack.TodoDataSource\TodoTrack.TodoDataSource.csproj" />
   </ItemGroup>
 
 </Project>

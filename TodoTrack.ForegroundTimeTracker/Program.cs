@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TodoTImeTrack.ForegroundTimeTracker.Models;
 using TodoTrack.Contracts;
-using TodoTrack.ForegroundTimeTracker;
+using TodoTrack.TodoDataSource;
 
 namespace ForegroundTimeTracker
 {
@@ -18,12 +18,8 @@ namespace ForegroundTimeTracker
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddDbContext<SQLiteDbContext>(options=>
-                    {
-                        options.UseSqlite("Data Source=test.db");
-                    });
                     services.AddSingleton<IArrangement, Arrangement>();
-                    services.AddSingleton<ITodoRepo, TodoRepo>();
+                    services.AddSingleton<ITodoRepo, TodoSourceRepo>();
                     services.AddTransient<IWorkFromProcessRepo, WorkFromProcessRepo>();
                     services.AddHostedService<AggregationWorker>();
                     services.AddHostedService<MonitorWorker>();

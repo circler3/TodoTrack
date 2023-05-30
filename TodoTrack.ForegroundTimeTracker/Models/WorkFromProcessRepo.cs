@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TodoTrack.ForegroundTimeTracker;
+using TodoTrack.Contracts;
+using TodoTrack.TodoDataSource;
 
 namespace TodoTImeTrack.ForegroundTimeTracker.Models
 {
@@ -16,7 +17,7 @@ namespace TodoTImeTrack.ForegroundTimeTracker.Models
         {
             _context = context;
         }
-        public async Task<bool> PostNewEntriesAsync(IEnumerable<WorkFromProcess> workFromProcesses)
+        public async Task<bool> PostNewEntriesAsync(IEnumerable<ProcessPeriod> workFromProcesses)
         {
             await _context.Database.EnsureCreatedAsync();
             await _context.WorkFromProcesses.AddRangeAsync(workFromProcesses);

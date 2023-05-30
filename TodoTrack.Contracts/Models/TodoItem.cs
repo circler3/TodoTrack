@@ -10,26 +10,33 @@ namespace TodoTrack.Contracts
     public class TodoItem
     {
         [Key]
-        public virtual string Id { get; init; } = string.Empty;
+        public virtual string Id { get; set; } = string.Empty;
         public virtual string Name { get; set; } = string.Empty;
         public virtual string? Description { get; set; }
         public virtual string? Comment { get; set; }
         public virtual Project? Project { get; set; }
+        [NotMapped]
         public virtual ICollection<Category>? Categories { get; set; }
+        [NotMapped]
         public virtual ICollection<string> Tags { get; set; } = new List<string>();
+        [NotMapped]
         public virtual ICollection<TodoItem>? SubTodoItems { get; set; }
         public virtual long? CreatedTimestamp { get; set; }
         public virtual long? FinishedTimestamp { get; set; }
         public virtual long? ScheduledBeginTimestamp { get; set; }
         public virtual long? ScheduledDueTimestamp { get; set; }
+        [NotMapped]
         public virtual IList<long>? NotifyTimestamp { get; set; }
         public virtual long? EstimatedDuration { get; set; }
         public virtual string? RepeatCron { get; set; }
         public virtual bool Repeatable { get; set; } = false;
         public virtual TodoStatus Status { get; set; }
         public virtual EisenhowerMatrix Priority { get; set; }
+        [NotMapped]
         public virtual ICollection<string> MatchKeys { get; set; } = new List<string>();
+        [NotMapped]
         public virtual ICollection<WorkPeriod>? WorkPeriods { get; set; } 
+        [NotMapped]
         public virtual ICollection<Attachment>? Attachments { get; set; }
 
         public static bool TryParse(string? todoBuildString, out TodoItem? item)

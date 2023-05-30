@@ -17,7 +17,7 @@ namespace ForegroundTimeTracker
     {
         private readonly IConfiguration _configuration;
         private readonly IArrangement _aggregationWorker;
-        private WorkFromProcess? _lastProcess;
+        private ProcessPeriod? _lastProcess;
 
         public MonitorWorker(IConfiguration configuration, IArrangement aggregationWorker)
         {
@@ -39,13 +39,13 @@ namespace ForegroundTimeTracker
 
                 if (_lastProcess == null)
                 {
-                    _lastProcess = new WorkFromProcess(currentProcess);
+                    _lastProcess = new ProcessPeriod(currentProcess);
                     _aggregationWorker.Enqueue(_lastProcess);
                     continue;
                 }
                 if(_lastProcess.ProcessId != currentProcess.Id || DateTimeOffset.Now.TimeOfDay < TimeSpan.FromSeconds(1))
                 {
-                    var currentWorkProcess = new WorkFromProcess(currentProcess);
+                    var currentWorkProcess = new ProcessPeriod(currentProcess);
                     _lastProcess.EndTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
                     await Console.Out.WriteLineAsync($"Switch to { currentWorkProcess.Title} from {_lastProcess.Title}");
                     _aggregationWorker.Enqueue(currentWorkProcess);

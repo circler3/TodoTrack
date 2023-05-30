@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TodoTImeTrack.ForegroundTimeTracker.Models
+namespace TodoTrack.Contracts
 {
     public interface IWorkFromProcessRepo
     {
-        Task<bool> PostNewEntriesAsync(IEnumerable<WorkFromProcess> workFromProcesses);
+        Task<bool> PostNewEntriesAsync(IEnumerable<ProcessPeriod> workFromProcesses);
     }
 }

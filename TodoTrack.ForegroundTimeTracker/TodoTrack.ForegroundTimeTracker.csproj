@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TodoTrack.Contracts\TodoTrack.Contracts.csproj" />
+    <ProjectReference Include="..\TodoTrack.TodoDataSource\TodoTrack.TodoDataSource.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,10 +6,10 @@ using System.Diagnostics;
 
 namespace ForegroundTimeTracker.Models
 {
-    public class WorkFromProcess
+    public class ProcessPeriod
     {
 #nullable disable
-        protected WorkFromProcess()
+        protected ProcessPeriod()
         {
             // For ORM ONLY
         }
@@ -27,7 +27,7 @@ namespace ForegroundTimeTracker.Models
         public TimeSpan Duration => TimeSpan.FromSeconds(EndTimestamp - StartTimestamp);
         //TODO: Friendly to ORM.
         public List<long> IdlePeriods { get; init; }
-        public WorkFromProcess(Process process)
+        public ProcessPeriod(Process process)
         {
             ProcessId = process.Id;
             ProcessName = process.ProcessName;
@@ -37,7 +37,7 @@ namespace ForegroundTimeTracker.Models
             IdlePeriods = new List<long>();
         }
 
-        public WorkFromProcess(WorkFromProcess process)
+        public ProcessPeriod(ProcessPeriod process)
         {
             ProcessId = process.ProcessId;
             ProcessName = process.ProcessName;

@@ -6,6 +6,6 @@ namespace ForegroundTimeTracker
     public interface IArrangement
     {
         Task ArrangeAsync();
-        bool Enqueue(WorkFromProcess process);
+        bool Enqueue(ProcessPeriod process);
     }
 }

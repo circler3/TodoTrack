@@ -8,10 +8,9 @@ namespace TodoTrack.Contracts
 {
     public interface ITodoRepo
     {
-        ValueTask<IList<TodoItem>> GetTodayTodoItemsAsync();
-        ValueTask<TodoItem> GetCurrentTodoItemAsync();
+        Task<IList<TodoItem>> GetTodayTodoItemsAsync();
         bool UpdateAsync(TodoItem item);
-        Project? GetPrjectFromName(string value);
+        Task<Project?> GetProjectFromNameAsync(string value);
         Task<TodoItem> CreateTodoItemAsync(TodoItem item);
     }
 }

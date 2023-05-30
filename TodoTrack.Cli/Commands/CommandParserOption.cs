@@ -1,19 +1,23 @@
-﻿namespace TodoTrack.Cli.Commands
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Security.Claims;
+
+namespace TodoTrack.Cli.Commands
 {
     public class CommandParserOption
     {
-        private readonly Dictionary<string, string> _commandDict;
+        private readonly Dictionary<string, Type> _commandDict;
         public CommandParserOption()
         {
-            _commandDict = new Dictionary<string, string>();
+            _commandDict = new Dictionary<string, Type>();
         }
 
-        public Dictionary<string, string> CommandDict => _commandDict;
+        public Dictionary<string, Type> CommandDict => _commandDict;
 
         public void AddCommand<T>(string v)
-            where T : ICommand
+            where T : class, ICommand
         {
-            CommandDict[v] = nameof(T);
+            CommandDict[v] = typeof(T);
         }
+
     }
 }

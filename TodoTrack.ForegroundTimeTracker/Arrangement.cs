@@ -14,7 +14,7 @@ namespace ForegroundTimeTracker
         private readonly IWorkFromProcessRepo _workFromProcessRepo;
         private readonly ITodoRepo _todoRepo;
 
-        private Queue<WorkFromProcess> _workQueue { get; init; }
+        private Queue<ProcessPeriod> _workQueue { get; init; }
         public Arrangement(IWorkFromProcessRepo workFromProcessRepo, ITodoRepo todoRepo)
         {
             _workQueue = new();
@@ -22,7 +22,7 @@ namespace ForegroundTimeTracker
             _todoRepo = todoRepo;
         }
 
-        public bool Enqueue(WorkFromProcess process)
+        public bool Enqueue(ProcessPeriod process)
         {
             _workQueue.Enqueue(process);
             return true;
@@ -31,8 +31,8 @@ namespace ForegroundTimeTracker
         public async Task ArrangeAsync()
         {
             if (_workQueue.Count < 5) return;
-            List<WorkFromProcess> workList = new(_workQueue.Count);
-            WorkFromProcess lastWorkFromProcess = _workQueue.Dequeue();
+            List<ProcessPeriod> workList = new(_workQueue.Count);
+            ProcessPeriod lastWorkFromProcess = _workQueue.Dequeue();
             while (_workQueue.Count > 2)
             {
                 var process = _workQueue.Dequeue();
@@ -40,7 +40,7 @@ namespace ForegroundTimeTracker
                 {
                     // additional workitem generate. split it into two individual units.
                     // duplicate last item.
-                    var newLastWorkFromProcess = new WorkFromProcess(lastWorkFromProcess)
+                    var newLastWorkFromProcess = new ProcessPeriod(lastWorkFromProcess)
                     {
                         StartTimestamp = ((DateTimeOffset)DateTimeOffset.FromUnixTimeSeconds(lastWorkFromProcess.EndTimestamp).Date).ToUnixTimeSeconds()
                     };
@@ -62,7 +62,7 @@ namespace ForegroundTimeTracker
             //Match(workList, await _todoRepo.GetTodayTodoItemsAsync(), await _todoRepo.GetCurrentTodoItemAsync());
         }
 
-        private void TestOutputResult(List<WorkFromProcess> workList)
+        private void TestOutputResult(List<ProcessPeriod> workList)
         {
             Console.Clear();
             Console.WriteLine("*****");

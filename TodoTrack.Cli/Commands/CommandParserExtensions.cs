@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,11 +14,17 @@ namespace TodoTrack.Cli.Commands
         public static IServiceCollection AddCommandParser(this IServiceCollection services)
         {
             services.AddTransient<CommandParserOption>();
-            return services.AddSingleton<CommandParser>();
+            return services.AddTransient<CommandParser>();
         }
 
         public static IServiceCollection AddCommandParser(this IServiceCollection services, Action<CommandParserOption> setupAction)
         {
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes()
+     .Where(t => !t.IsAbstract && t.GetInterfaces().Any(i => i == typeof(ICommand))))
+            {
+                services.AddTransient(type);
+                //services.AddTransient(type.GetInterfaces().First(i => i == typeof(ICommand)), type);
+            }
             services.Configure(setupAction);
             return services.AddTransient<CommandParser>();
         }

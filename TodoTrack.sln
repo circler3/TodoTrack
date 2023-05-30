@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决�
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoTrack.Contracts", "TodoTrack.Contracts\TodoTrack.Contracts.csproj", "{6994B998-0448-48BE-B73C-4FDC3EAB3074}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoTrack.Cli", "TodoTrack.Cli\TodoTrack.Cli.csproj", "{7E86E751-BAF2-431B-9CEE-BF9AC06C4472}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoTrack.Cli", "TodoTrack.Cli\TodoTrack.Cli.csproj", "{7E86E751-BAF2-431B-9CEE-BF9AC06C4472}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoTrack.TodoDataSource", "TodoTrack.TodoDataSource\TodoTrack.TodoDataSource.csproj", "{DDA4220F-3F68-42F4-9B47-FE046629EC03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{7E86E751-BAF2-431B-9CEE-BF9AC06C4472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E86E751-BAF2-431B-9CEE-BF9AC06C4472}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E86E751-BAF2-431B-9CEE-BF9AC06C4472}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDA4220F-3F68-42F4-9B47-FE046629EC03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDA4220F-3F68-42F4-9B47-FE046629EC03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDA4220F-3F68-42F4-9B47-FE046629EC03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDA4220F-3F68-42F4-9B47-FE046629EC03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
