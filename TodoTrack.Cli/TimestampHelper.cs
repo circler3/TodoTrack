@@ -1,4 +1,4 @@
-﻿namespace TodoTrack.Cli.Commands
+﻿namespace TodoTrack.Cli
 {
     internal class TimestampHelper
     {

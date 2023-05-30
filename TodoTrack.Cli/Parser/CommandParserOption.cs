@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
+using TodoTrack.Cli.Commands;
 
-namespace TodoTrack.Cli.Commands
+namespace TodoTrack.Cli.Parser
 {
     public class CommandParserOption
     {

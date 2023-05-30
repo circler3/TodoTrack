@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Spectre.Console.Cli;
-using TodoTrack.Cli.Commands;
+using TodoTrack.Cli.Parser;
 
 namespace TodoTrack.Cli
 {

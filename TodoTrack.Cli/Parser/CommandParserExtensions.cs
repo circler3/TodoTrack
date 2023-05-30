@@ -6,8 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TodoTrack.Cli.Commands;
 
-namespace TodoTrack.Cli.Commands
+namespace TodoTrack.Cli.Parser
 {
     public static class CommandParserExtensions
     {

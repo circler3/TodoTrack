@@ -9,8 +9,9 @@ namespace TodoTrack.Contracts
     public interface ITodoRepo
     {
         Task<IList<TodoItem>> GetTodayTodoItemsAsync();
-        bool UpdateAsync(TodoItem item);
+        Task<bool> DeleteTodoItemAsync(string id);
         Task<Project?> GetProjectFromNameAsync(string value);
         Task<TodoItem> CreateTodoItemAsync(TodoItem item);
+        Task<bool> UpdateTodoItemAsync(string id, TodoItem item);
     }
 }

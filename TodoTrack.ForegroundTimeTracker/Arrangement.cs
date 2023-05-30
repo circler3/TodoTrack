@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using TodoTImeTrack.ForegroundTimeTracker.Models;
 using TodoTrack.Contracts;
 
 namespace ForegroundTimeTracker
