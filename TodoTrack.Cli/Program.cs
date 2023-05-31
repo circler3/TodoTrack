@@ -21,14 +21,14 @@ namespace TodoTrack.Cli
         {
             services.AddCommandParser(options =>
             {
-                options.AddCommand<NewTodoCommand>("new");
-                options.AddCommand<DelTodoCommand>("del");
-                options.AddCommand<ListTodoCommand>("list");
-                options.AddCommand<NewTodoCommand>("start");
-                options.AddCommand<NewTodoCommand>("finish");
-                options.AddCommand<NewTodoCommand>("stop");
-                options.AddCommand<NewTodoCommand>("add");
-                options.AddCommand<NewTodoCommand>("remove");
+                options.AddCommand<NewCommand>("new");
+                options.AddCommand<DelCommand>("del");
+                options.AddCommand<ListCommand>("list");
+                options.AddCommand<NewCommand>("start");
+                options.AddCommand<NewCommand>("finish");
+                options.AddCommand<NewCommand>("stop");
+                options.AddCommand<AddCommand>("add");
+                options.AddCommand<RemoveCommand>("remove");
             });
             services.AddAutoMapper(options =>
             {

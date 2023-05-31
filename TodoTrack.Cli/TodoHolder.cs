@@ -12,7 +12,7 @@ namespace TodoTrack.Cli
     public class TodoHolder
     {
         private readonly List<IndexedTodoItem> _todoItems;
-        private string _focusId;
+        private string _focusId = "";
         private readonly ITodoRepo _todoRepo;
         private readonly IMapper _mapper;
 
@@ -21,10 +21,9 @@ namespace TodoTrack.Cli
             _todoItems = new List<IndexedTodoItem>();
             _todoRepo = todoRepo;
             _mapper = mapper;
-            _todoItems.AddRange(todoRepo.GetTodayTodoItemsAsync().Result
-                .OrderByDescending(w => w.ScheduledDueTimestamp).Select(w => mapper.Map<IndexedTodoItem>(w)));
+            //_todoItems.AddRange(todoRepo.GetTodayTodoItemsAsync().Result
+            //    .OrderByDescending(w => w.ScheduledDueTimestamp).Select(w => mapper.Map<IndexedTodoItem>(w)));
         }
-
         internal List<IndexedTodoItem> TodoItems
         {
             get
@@ -66,6 +65,50 @@ namespace TodoTrack.Cli
             }
         }
 
+        internal async Task AddTodayItemsAsync(IList<int> addIndex)
+        {
+            for (var i = addIndex.Count - 1; i >= 0; i--)
+            {
+                if (_todoItems.Count <= addIndex[i]) continue;
+                _todoItems[addIndex[i]].IsToday = true;
+            }
+            await Task.CompletedTask;
+        }
+
+        internal async Task AddTodayItemsAsync(IEnumerable<string> addIds)
+        {
+            foreach (var item in addIds)
+            {
+                var target = _todoItems.SingleOrDefault(w => w.Id == item);
+                if (target == null) return;
+                target.IsToday = true;
+            }
+            await Task.CompletedTask;
+        }
+
+        internal async Task RemoveTodayTodoItemAsync(IList<int> deleteIndex)
+        {
+            var sorted = deleteIndex.OrderDescending();
+            for (var i = deleteIndex.Count - 1; i >= 0; i--)
+            {
+                if (_todoItems.Count <= deleteIndex[i]) continue;
+                _todoItems[deleteIndex[i]].IsToday = false;
+            }
+            await Task.CompletedTask;
+        }
+
+        internal async Task RemoveTodayTodoItemAsync(IEnumerable<string> deleteIds)
+        {
+            foreach (var item in deleteIds)
+            {
+                var target = (_todoItems.SingleOrDefault(w => w.Id == item));
+                if(target == null) return;
+                target.IsToday = false;
+            }
+            await Task.CompletedTask;
+        }
+
+
         private async Task UpdateTodoItemAsync(IndexedTodoItem item)
         {
             await _todoRepo.UpdateTodoItemAsync(item.Id, item);
@@ -87,7 +130,7 @@ namespace TodoTrack.Cli
             foreach (var item in deleteIds)
             {
                 await _todoRepo.DeleteTodoItemAsync(item);
-                _todoItems.Remove(_todoItems.Single(w=>w.Id == item));
+                _todoItems.Remove(_todoItems.Single(w => w.Id == item));
             }
         }
 
@@ -103,7 +146,7 @@ namespace TodoTrack.Cli
 
         internal async Task<IList<IndexedTodoItem>> GetNowTodoListAsync()
         {
-            return TodoItems;
+            return await Task.FromResult(TodoItems);
         }
     }
 }

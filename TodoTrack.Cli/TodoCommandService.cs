@@ -8,7 +8,6 @@ namespace TodoTrack.Cli
     public class TodoCommandService : BackgroundService
     {
         private readonly CommandParser _commandParser;
-        private readonly IServiceProvider _serviceProvider;
 
         public TodoCommandService(CommandParser commandParser)
         {

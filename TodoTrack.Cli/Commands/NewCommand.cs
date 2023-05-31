@@ -14,11 +14,11 @@ namespace TodoTrack.Cli.Commands
     /// <summary>
     /// add a new todo item into system.
     /// </summary>
-    public class NewTodoCommand : ICommand
+    public class NewCommand : ICommand
     {
         private readonly TodoHolder _todoHolder;
 
-        public NewTodoCommand(TodoHolder todoHolder)
+        public NewCommand(TodoHolder todoHolder)
         {
             _todoHolder = todoHolder;
         }

@@ -14,11 +14,11 @@ namespace TodoTrack.Cli.Commands
     /// <summary>
     /// delelte a todo item from system.
     /// </summary>
-    public class ListTodoCommand : ICommand
+    public class ListCommand : ICommand
     {
         private readonly TodoHolder _todoHolder;
 
-        public ListTodoCommand(TodoHolder todoHolder)
+        public ListCommand(TodoHolder todoHolder)
         {
             _todoHolder = todoHolder;
         }

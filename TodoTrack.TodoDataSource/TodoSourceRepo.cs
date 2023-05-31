@@ -34,12 +34,12 @@ namespace TodoTrack.TodoDataSource
 
         public async Task<Project?> GetProjectFromNameAsync(string value)
         {
-            return new Project { Id= Guid.NewGuid().ToString(), Name = value };
+            return await Task.FromResult(new Project { Id= Guid.NewGuid().ToString(), Name = value });
         }
 
         public async Task<IList<TodoItem>> GetTodayTodoItemsAsync()
         {
-            return _dbContext.TodoItems.ToList();
+            return await Task.FromResult(_dbContext.TodoItems.ToList());
         }
 
         public async Task<bool> PostNewEntriesAsync(IEnumerable<ProcessPeriod> workFromProcesses)

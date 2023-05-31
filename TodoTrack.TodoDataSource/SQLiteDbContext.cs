@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 using TodoTrack.Contracts;
 
 namespace TodoTrack.TodoDataSource
@@ -27,7 +28,7 @@ namespace TodoTrack.TodoDataSource
                 v=> v.Split(',', StringSplitOptions.None).ToList().Select(w=> long.Parse(w)).ToList()
                 );
         }
-        public DbSet<ProcessPeriod> WorkFromProcesses { get; set; }
-        public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<ProcessPeriod> WorkFromProcesses { get; set; } = default!;
+        public DbSet<TodoItem> TodoItems { get; set; } = default!;
     }
 }
