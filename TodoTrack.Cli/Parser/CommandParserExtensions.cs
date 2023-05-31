@@ -21,7 +21,7 @@ namespace TodoTrack.Cli.Parser
         public static IServiceCollection AddCommandParser(this IServiceCollection services, Action<CommandParserOption> setupAction)
         {
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes()
-     .Where(t => !t.IsAbstract && t.GetInterfaces().Any(i => i == typeof(ICommand))))
+     .Where(t => !t.IsAbstract && t.GetInterfaces().Any(i => i == typeof(ITodoCommand))))
             {
                 services.AddTransient(type);
                 //services.AddTransient(type.GetInterfaces().First(i => i == typeof(ICommand)), type);

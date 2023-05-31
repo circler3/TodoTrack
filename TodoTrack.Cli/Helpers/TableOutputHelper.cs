@@ -1,9 +1,4 @@
 ﻿using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TodoTrack.Cli
 {
@@ -12,7 +7,7 @@ namespace TodoTrack.Cli
         public static void BuildTable(IList<IndexedTodoItem> items, string title = "")
         {
             var table = new Table();
-            if(!string.IsNullOrWhiteSpace(title)) table.Title = new TableTitle(title.Trim());
+            if (!string.IsNullOrWhiteSpace(title)) table.Title = new TableTitle(title.Trim());
 
             table.AddColumn(new TableColumn("[red]Focus[/]").Centered());
             table.AddColumn("Index");
@@ -22,14 +17,16 @@ namespace TodoTrack.Cli
 
             for (int i = 0; i < items.Count; i++)
             {
+                string color = "purple";
+                if (items[i].IsToday) color = "white";
                 List<string> sb = new()
-                {
-                    items[i].IsFocus ? "[red]>[/]" : "",
-                    $"[green]{items[i].Index}[/]",
-                    items[i].Name,
-                    items[i].Status.ToString(),
-                    items[i].Project?.Name ?? "null"
-                };
+                    {
+                        items[i].IsFocus ? "[red]>[/]" : "",
+                        $"[green]{items[i].Index}[/]",
+                        $"[{color}]{items[i].Name}[/]",
+                        $"[{color}]{items[i].Status}[/]",
+                        $"[{color}]{items[i].Project?.Name ?? "null"}[/]"
+                    };
                 table.AddRow(sb.ToArray());
             }
 

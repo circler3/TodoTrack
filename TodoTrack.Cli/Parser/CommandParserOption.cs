@@ -15,7 +15,7 @@ namespace TodoTrack.Cli.Parser
         public Dictionary<string, Type> CommandDict => _commandDict;
 
         public void AddCommand<T>(string v)
-            where T : class, ICommand
+            where T : class, ITodoCommand
         {
             CommandDict[v] = typeof(T);
         }

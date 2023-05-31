@@ -26,7 +26,7 @@ namespace TodoTrack.Cli.Parser
             if (_commandDict.TryGetValue(cmd, out var type))
             {
                 if (type == null) throw new ArgumentNullException(cmd);
-                var cmdImp = _provider.CreateScope().ServiceProvider.GetService(type) as ICommand;
+                var cmdImp = _provider.CreateScope().ServiceProvider.GetService(type) as ITodoCommand;
                 if (cmdImp == null) throw new ArgumentNullException(nameof(cmdImp));
                 await cmdImp.ExecuteAsync(jobStr);
             }

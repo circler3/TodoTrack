@@ -4,7 +4,7 @@ using TodoTrack.Contracts;
 
 namespace TodoTrack.Cli.Commands
 {
-    public interface ICommand
+    public interface ITodoCommand
     {
         public Task<int> ExecuteAsync([NotNull] string command);
     }

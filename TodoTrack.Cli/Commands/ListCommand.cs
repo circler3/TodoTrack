@@ -1,20 +1,12 @@
-﻿using Spectre.Console.Cli;
-using Spectre.Console;
-using System.ComponentModel;
+﻿using System.Data;
 using System.Diagnostics.CodeAnalysis;
-using TodoTrack.Contracts;
-using System.Text.RegularExpressions;
-using System.Reflection;
-using System.Data;
-using System.Text;
-using Microsoft.Extensions.Primitives;
 
 namespace TodoTrack.Cli.Commands
 {
     /// <summary>
     /// list all/today todo items from system.
     /// </summary>
-    public class ListCommand : ICommand
+    public class ListCommand : ITodoCommand
     {
         private readonly TodoHolder _todoHolder;
 
