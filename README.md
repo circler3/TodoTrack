@@ -35,6 +35,7 @@ There are several core backlogs of `TodoTrack`:
 
 ## Backlogs
 - [x] Foreground process based time consumption logging.
+- [ ] Management Console in Cli style
 - [ ] Basic Todo management
 
 ## Design

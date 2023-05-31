@@ -16,7 +16,7 @@ namespace TodoTrack.TodoDataSource
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=d:/temp/test.db");
+            optionsBuilder.UseSqlite("Data Source=d:/test.db");
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -30,5 +30,6 @@ namespace TodoTrack.TodoDataSource
         }
         public DbSet<ProcessPeriod> WorkFromProcesses { get; set; } = default!;
         public DbSet<TodoItem> TodoItems { get; set; } = default!;
+        public DbSet<Project> Projects{get;set;} = default!;
     }
 }

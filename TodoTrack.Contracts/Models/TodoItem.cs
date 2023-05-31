@@ -40,14 +40,5 @@ namespace TodoTrack.Contracts
         [NotMapped]
         public virtual ICollection<Attachment>? Attachments { get; set; }
 
-        public static bool TryParse(string? todoBuildString, out TodoItem? item)
-        {
-            item = default;
-            if (string.IsNullOrWhiteSpace(todoBuildString))
-            {
-                return false;
-            }
-            return true;
-        }
     }
 }

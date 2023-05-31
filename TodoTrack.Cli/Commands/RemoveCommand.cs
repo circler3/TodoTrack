@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.Scripting;
 namespace TodoTrack.Cli.Commands
 {
     /// <summary>
-    /// delelte a todo item from system.
+    /// remove a todo item from list of today.
     /// </summary>
     public class RemoveCommand : ICommand
     {
@@ -33,7 +33,7 @@ namespace TodoTrack.Cli.Commands
             {
                 if (todoIdToDelete.Length == 1 && !int.TryParse(todoIdToDelete[0], out var _))
                 {
-                    var range = GetRange(command);
+                    var range = RangeHelper.GetRange(command);
                     if (range == null)
                     {
                         await Console.Out.WriteLineAsync("Invalid range string.");
@@ -62,29 +62,6 @@ namespace TodoTrack.Cli.Commands
             }
             TableOutputHelper.BuildTable(_todoHolder.TodoItems);
             return 0;
-        }
-
-        private static Range? GetRange(string rangeString)
-        {
-            // Create the script options with the references and imports needed
-            ScriptOptions options = ScriptOptions.Default
-                .WithReferences(typeof(Range).Assembly)
-                .WithImports("System");
-
-            Range? myRange = null;
-            try
-            {
-                // Evaluate the range expression string as a Range object
-                myRange = CSharpScript.EvaluateAsync<Range>(
-                        "Range p=" + rangeString + ";return p;", options).Result;
-            }
-            catch (CompilationErrorException)
-            {
-
-            }
-
-
-            return myRange;
         }
     }
 }

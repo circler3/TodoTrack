@@ -73,7 +73,7 @@ namespace TodoTrack.Cli.Commands
                             break;
                     }
                 }
-                if (string.IsNullOrWhiteSpace(item.Name)) return 1;
+                if (string.IsNullOrWhiteSpace(item.Name)) return -1;
                 item.CreatedTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
                 if (instantFlag)
                 {
