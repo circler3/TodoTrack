@@ -12,6 +12,7 @@ namespace TodoTrack.TodoDataSource
         public TodoSourceRepo()
         {
             _dbContext = new SQLiteDbContext();
+            //_dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
         }
         //TODO: USE DTO TO MAKE ID IMUTTABLE

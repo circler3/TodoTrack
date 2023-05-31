@@ -6,5 +6,6 @@ namespace TodoTrack.Cli
     {
         public bool IsFocus { get; set; } = false;
         public bool IsToday { get; set; } = false;
+        public int Index { get; set; }
     }
 }

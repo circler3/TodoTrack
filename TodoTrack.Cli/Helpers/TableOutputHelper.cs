@@ -25,7 +25,7 @@ namespace TodoTrack.Cli
                 List<string> sb = new()
                 {
                     items[i].IsFocus ? "[red]>[/]" : "",
-                    $"[green]{i}[/]",
+                    $"[green]{items[i].Index}[/]",
                     items[i].Name,
                     items[i].Status.ToString(),
                     items[i].Project?.Name ?? "null"

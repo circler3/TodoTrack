@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.Scripting;
 namespace TodoTrack.Cli.Commands
 {
     /// <summary>
-    /// delelte a todo item from system.
+    /// delete a todo item from system.
     /// </summary>
     public class DelCommand : ICommand
     {
@@ -44,12 +44,13 @@ namespace TodoTrack.Cli.Commands
                 }
                 else
                 {
-                    List<int> index = new();
+                    List<string> index = new();
                     foreach (var item in todoIdToDelete)
                     {
                         if (int.TryParse(item, out var result))
                         {
-                            index.Add(result);
+                            if (result >= _todoHolder.TodoItems.Count) continue;
+                            index.Add(_todoHolder.TodoItems[result].Id);
                         }
                     }
                     await _todoHolder.DeleteTodoItemAsync(index);

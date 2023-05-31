@@ -7,10 +7,10 @@ using System.Net.Http.Headers;
 
 namespace TodoTrack.Contracts
 {
-    public class TodoItem
+    public class TodoItem : IEntity
     {
         [Key]
-        public virtual string Id { get; set; } = string.Empty;
+        public virtual string Id { get; set; }= default!;
         public virtual string Name { get; set; } = string.Empty;
         public virtual string? Description { get; set; }
         public virtual string? Comment { get; set; }
@@ -36,7 +36,7 @@ namespace TodoTrack.Contracts
         [NotMapped]
         public virtual ICollection<string> MatchKeys { get; set; } = new List<string>();
         [NotMapped]
-        public virtual ICollection<WorkPeriod>? WorkPeriods { get; set; } 
+        public virtual ICollection<WorkPeriod>? WorkPeriods { get; set; }
         [NotMapped]
         public virtual ICollection<Attachment>? Attachments { get; set; }
 

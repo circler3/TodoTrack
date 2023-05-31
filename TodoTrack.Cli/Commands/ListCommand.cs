@@ -12,7 +12,7 @@ using Microsoft.Extensions.Primitives;
 namespace TodoTrack.Cli.Commands
 {
     /// <summary>
-    /// delelte a todo item from system.
+    /// list all/today todo items from system.
     /// </summary>
     public class ListCommand : ICommand
     {
@@ -27,14 +27,12 @@ namespace TodoTrack.Cli.Commands
             switch (command.ToLower())
             {
                 case "all":
-                    TableOutputHelper.BuildTable(await _todoHolder.GetAllTodoListAsync());
+                    TableOutputHelper.BuildTable(await _todoHolder.GetAllTodoListAsync(), "Todo All");
                     break;
                 case "today":
-                    TableOutputHelper.BuildTable(await _todoHolder.GetTodayTodoListAsync());
-                    break;
                 case "now":
                 default:
-                    TableOutputHelper.BuildTable(await _todoHolder.GetNowTodoListAsync());
+                    TableOutputHelper.BuildTable(_todoHolder.TodoItems.Where(w => w.IsToday).ToList(), "Todo Today");
                     break;
             }
             return 0;

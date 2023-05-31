@@ -11,18 +11,24 @@ namespace TodoTrack.Cli
 {
     public class TodoHolder
     {
-        private readonly List<IndexedTodoItem> _todoItems;
+        private readonly KeyedList<IndexedTodoItem> _todoItems;
         private string _focusId = "";
         private readonly ITodoRepo _todoRepo;
         private readonly IMapper _mapper;
 
         public TodoHolder(ITodoRepo todoRepo, IMapper mapper)
         {
-            _todoItems = new List<IndexedTodoItem>();
+            _todoItems = new();
             _todoRepo = todoRepo;
             _mapper = mapper;
-            //_todoItems.AddRange(todoRepo.GetTodayTodoItemsAsync().Result
-            //    .OrderByDescending(w => w.ScheduledDueTimestamp).Select(w => mapper.Map<IndexedTodoItem>(w)));
+            int i = 0;
+            _todoItems.AddRange(todoRepo.GetTodayTodoItemsAsync().Result
+                .OrderByDescending(w => w.ScheduledDueTimestamp).Select(w =>
+                {
+                    var result = mapper.Map<IndexedTodoItem>(w);
+                    result.Index = i++;
+                    return result;
+                }));
         }
         internal List<IndexedTodoItem> TodoItems
         {
@@ -37,6 +43,7 @@ namespace TodoTrack.Cli
         {
             var todo = await _todoRepo.CreateTodoItemAsync(item);
             var iTodo = _mapper.Map<IndexedTodoItem>(todo);
+            iTodo.Index = _todoItems.Count;
             _todoItems.Add(iTodo);
             return iTodo;
         }
@@ -65,16 +72,6 @@ namespace TodoTrack.Cli
             }
         }
 
-        internal async Task AddTodayItemsAsync(IList<int> addIndex)
-        {
-            for (var i = addIndex.Count - 1; i >= 0; i--)
-            {
-                if (_todoItems.Count <= addIndex[i]) continue;
-                _todoItems[addIndex[i]].IsToday = true;
-            }
-            await Task.CompletedTask;
-        }
-
         internal async Task AddTodayItemsAsync(IEnumerable<string> addIds)
         {
             foreach (var item in addIds)
@@ -86,23 +83,12 @@ namespace TodoTrack.Cli
             await Task.CompletedTask;
         }
 
-        internal async Task RemoveTodayTodoItemAsync(IList<int> deleteIndex)
-        {
-            var sorted = deleteIndex.OrderDescending();
-            for (var i = deleteIndex.Count - 1; i >= 0; i--)
-            {
-                if (_todoItems.Count <= deleteIndex[i]) continue;
-                _todoItems[deleteIndex[i]].IsToday = false;
-            }
-            await Task.CompletedTask;
-        }
-
         internal async Task RemoveTodayTodoItemAsync(IEnumerable<string> deleteIds)
         {
             foreach (var item in deleteIds)
             {
                 var target = (_todoItems.SingleOrDefault(w => w.Id == item));
-                if(target == null) return;
+                if (target == null) return;
                 target.IsToday = false;
             }
             await Task.CompletedTask;
@@ -112,17 +98,6 @@ namespace TodoTrack.Cli
         private async Task UpdateTodoItemAsync(IndexedTodoItem item)
         {
             await _todoRepo.UpdateTodoItemAsync(item.Id, item);
-        }
-
-        internal async Task DeleteTodoItemAsync(IList<int> deleteIndex)
-        {
-            var sorted = deleteIndex.OrderDescending();
-            for (var i = deleteIndex.Count - 1; i >= 0; i--)
-            {
-                if (_todoItems.Count <= deleteIndex[i]) continue;
-                await _todoRepo.DeleteTodoItemAsync(_todoItems[deleteIndex[i]].Id);
-                _todoItems.RemoveAt(deleteIndex[i]);
-            }
         }
 
         internal async Task DeleteTodoItemAsync(IEnumerable<string> deleteIds)
@@ -136,17 +111,8 @@ namespace TodoTrack.Cli
 
         internal async Task<IList<IndexedTodoItem>> GetAllTodoListAsync()
         {
-            return _mapper.Map<IList<IndexedTodoItem>>(await _todoRepo.GetTodayTodoItemsAsync());
+            return await Task.FromResult(_todoItems);
         }
 
-        internal async Task<IList<IndexedTodoItem>> GetTodayTodoListAsync()
-        {
-            return _mapper.Map<IList<IndexedTodoItem>>(await _todoRepo.GetTodayTodoItemsAsync());
-        }
-
-        internal async Task<IList<IndexedTodoItem>> GetNowTodoListAsync()
-        {
-            return await Task.FromResult(TodoItems);
-        }
     }
 }

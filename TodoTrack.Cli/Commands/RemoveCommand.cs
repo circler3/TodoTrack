@@ -40,19 +40,20 @@ namespace TodoTrack.Cli.Commands
                         return -1;
                     }
                     var t = _todoHolder.TodoItems.ToArray()[range.Value].Select(w => w.Id);
-                    await _todoHolder.DeleteTodoItemAsync(t);
+                    await _todoHolder.RemoveTodayTodoItemAsync(t);
                 }
                 else
                 {
-                    List<int> index = new();
+                    List<string> index = new();
                     foreach (var item in todoIdToDelete)
                     {
                         if (int.TryParse(item, out var result))
                         {
-                            index.Add(result);
+                            if (result >= _todoHolder.TodoItems.Count) continue;
+                            index.Add(_todoHolder.TodoItems[result].Id);
                         }
                     }
-                    await _todoHolder.DeleteTodoItemAsync(index);
+                    await _todoHolder.RemoveTodayTodoItemAsync(index);
                 }
             }
             catch (Exception e)
