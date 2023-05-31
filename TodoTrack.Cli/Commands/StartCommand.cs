@@ -19,7 +19,7 @@ namespace TodoTrack.Cli.Commands
             try
             {
                 List<string> strList = RangeHelper.GetMatchedStringList(command, _todoHolder.TodoItems);
-                await _todoHolder.StopTodoItemAsync(strList);
+                await _todoHolder.StartTodoItemAsync(strList);
             }
             catch (Exception e)
             {

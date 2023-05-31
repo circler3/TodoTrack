@@ -24,17 +24,20 @@ namespace TodoTrack.Cli
                 options.AddCommand<NewCommand>("new");
                 options.AddCommand<DelCommand>("del");
                 options.AddCommand<ListCommand>("list");
-                options.AddCommand<NewCommand>("start");
-                options.AddCommand<NewCommand>("finish");
-                options.AddCommand<NewCommand>("stop");
+                options.AddCommand<StartCommand>("start");
+                options.AddCommand<FinishCommand>("finish");
+                options.AddCommand<StopCommand>("stop");
                 options.AddCommand<AddCommand>("add");
                 options.AddCommand<RemoveCommand>("remove");
             });
             services.AddAutoMapper(options =>
             {
                 options.CreateMap<TodoItem, IndexedTodoItem>();
-            });
+            }); 
             services.AddTransient<ITodoRepo, TodoSourceRepo>();
+            services.AddTransient<ITagRepo, TagSourceRepo>();
+            services.AddTransient<IProjectRepo, ProjectSourceRepo>();
+            services.AddTransient<IProcessPeriodRepo, ProcessPeriodSourceRepo>();
             services.AddSingleton<TodoHolder>();
 
 

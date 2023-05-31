@@ -42,7 +42,7 @@ namespace ForegroundTimeTracker
                     {
                         StartTimestamp = ((DateTimeOffset)DateTimeOffset.FromUnixTimeSeconds(lastWorkFromProcess.EndTimestamp).Date).ToUnixTimeSeconds()
                     };
-                    // endtimestamp at next day 00:00:00
+                    // end timestamp at next day 00:00:00
                     lastWorkFromProcess.EndTimestamp = ((DateTimeOffset)DateTimeOffset.FromUnixTimeSeconds(lastWorkFromProcess.StartTimestamp).AddDays(1).Date).ToUnixTimeSeconds();
                     workList.Add(lastWorkFromProcess);
                     lastWorkFromProcess = newLastWorkFromProcess;

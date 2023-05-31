@@ -29,7 +29,7 @@ namespace TodoTrack.Cli.Commands
             try
             {
                 List<string> strList = RangeHelper.GetMatchedStringList(command, _todoHolder.TodoItems);
-                await _todoHolder.AddTodayItemsAsync(strList);
+                await _todoHolder.RemoveTodayTodoItemAsync(strList);
             }
             catch (Exception e)
             {

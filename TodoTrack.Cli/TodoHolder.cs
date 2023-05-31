@@ -62,6 +62,7 @@ namespace TodoTrack.Cli
                 if (todoId == item.Id)
                 {
                     item.IsFocus = true;
+                    item.IsToday = true;
                     if (_focusId != item.Id)
                     {
                         item.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
@@ -102,6 +103,7 @@ namespace TodoTrack.Cli
                 var target = (_todoItems.SingleOrDefault(w => w.Id == item));
                 if (target == null) return;
                 target.IsToday = false;
+                await UnsetFocusAsync(target.Id);
             }
             await Task.CompletedTask;
         }
