@@ -53,7 +53,7 @@ namespace TodoTrack.Cli
             return await _todoRepo.GetProjectFromNameAsync(value);
         }
 
-        internal async void SetFocusAsync(string todoId)
+        internal async Task SetFocusAsync(string todoId)
         {
             foreach (var item in _todoItems)
             {
@@ -70,6 +70,16 @@ namespace TodoTrack.Cli
                 else
                     item.IsFocus = false;
             }
+        }
+
+        internal async Task UnsetFocusAsync(string todoId)
+        {
+            var item = _todoItems[todoId];
+            if (item == null) return;
+            item.IsFocus = false;
+            item.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
+            _focusId = "";
+            await UpdateTodoItemAsync(item);
         }
 
         internal async Task AddTodayItemsAsync(IEnumerable<string> addIds)
@@ -109,6 +119,64 @@ namespace TodoTrack.Cli
             }
         }
 
+        internal async Task StartTodoItemAsync(IEnumerable<string> ids)
+        {
+            foreach (var id in ids)
+            {
+                var target = _todoItems[id];
+                var currentDateStamp = TimestampHelper.CurrentDateStamp;
+
+                if (target != null)
+                {
+                    target.LatestWorkTimestamp = currentDateStamp;
+                    target.Status = TodoStatus.InProgress;
+                    target.TodoPeriods.Add(new WorkPeriod { StartTimestamp = currentDateStamp });
+                    await SetFocusAsync(target.Id);
+                }
+                else
+                    Console.WriteLine("Invalid index. Cannot start Todo item");
+            }
+        }
+
+        internal async Task FinishTodoItemAsync(IEnumerable<string> ids)
+        {
+            foreach (var id in ids)
+            {
+                var target = _todoItems[id];
+                if (target != null)
+                {
+                    var currentDateStamp = TimestampHelper.CurrentDateStamp;
+                    target.LatestWorkTimestamp = currentDateStamp;
+                    if (target.TodoPeriods.Count == 0) return;
+                    if (target.TodoPeriods[^1].Started) target.TodoPeriods[^1].EndTimestamp = currentDateStamp;
+                    target.FinishedTimestamp = currentDateStamp;
+                    //todo: recheck
+                    if (currentDateStamp <= target.ScheduledDueTimestamp) target.Status = TodoStatus.FinishedOnTime;
+                    else target.Status = TodoStatus.FinishedDelayed;
+                    await UnsetFocusAsync(target.Id);
+                }
+                else
+                    Console.WriteLine("Invalid index. Cannot start Todo item");
+            }
+        }
+
+        internal async Task StopTodoItemAsync(IEnumerable<string> ids)
+        {
+            foreach (var id in ids)
+            {
+                var target = _todoItems[id];
+                if (target != null)
+                {
+                    var currentDateStamp = TimestampHelper.CurrentDateStamp;
+                    target.LatestWorkTimestamp = currentDateStamp;
+                    if (target.TodoPeriods.Count == 0) return;
+                    if (target.TodoPeriods[^1].Started) target.TodoPeriods[^1].EndTimestamp = currentDateStamp;
+                    await UnsetFocusAsync(target.Id);
+                }
+                else
+                    Console.WriteLine("Invalid index. Cannot start Todo item");
+            }
+        }
         internal async Task<IList<IndexedTodoItem>> GetAllTodoListAsync()
         {
             return await Task.FromResult(_todoItems);

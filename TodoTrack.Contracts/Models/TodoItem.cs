@@ -34,7 +34,9 @@ namespace TodoTrack.Contracts
         public virtual TodoStatus Status { get; set; }
         public virtual EisenhowerMatrix Priority { get; set; }
         [NotMapped]
-        public virtual ICollection<WorkPeriod>? WorkPeriods { get; set; }
+        public virtual IList<WorkPeriod>? ProcessPeriods { get; set; } = new List<WorkPeriod>();
+        [NotMapped]
+        public virtual IList<WorkPeriod> TodoPeriods { get; set; } = new List<WorkPeriod>();
         [NotMapped]
         public virtual ICollection<Attachment>? Attachments { get; set; }
 
