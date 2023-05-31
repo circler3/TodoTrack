@@ -51,11 +51,12 @@ namespace TodoTrack.Cli.Commands
                             break;
                         case "#":
                             //tag
-                            item.Tags.Add(value);
+                            //TODO: Implement tags
+                            //item.Tags.Add(value);
                             break;
                         case "&":
-                            item.MatchKeys.Add(value);
-                            //match keys
+                            //match keys of tags
+
                             break;
                         case "/":
                             //time

@@ -18,7 +18,7 @@ namespace TodoTrack.Contracts
         [NotMapped]
         public virtual ICollection<Category>? Categories { get; set; }
         [NotMapped]
-        public virtual ICollection<string> Tags { get; set; } = new List<string>();
+        public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
         [NotMapped]
         public virtual ICollection<TodoItem>? SubTodoItems { get; set; }
         public virtual long? CreatedTimestamp { get; set; }
@@ -33,8 +33,6 @@ namespace TodoTrack.Contracts
         public virtual bool Repeatable { get; set; } = false;
         public virtual TodoStatus Status { get; set; }
         public virtual EisenhowerMatrix Priority { get; set; }
-        [NotMapped]
-        public virtual ICollection<string> MatchKeys { get; set; } = new List<string>();
         [NotMapped]
         public virtual ICollection<WorkPeriod>? WorkPeriods { get; set; }
         [NotMapped]

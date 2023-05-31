@@ -26,7 +26,7 @@ namespace TodoTrack.Cli.Commands
                 AnsiConsole.WriteException(e);
                 throw;
             }
-            TableOutputHelper.BuildTable(_todoHolder.TodoItems, "Todo All");
+            TableOutputHelper.BuildTable(_todoHolder.TodoItems.Where(w=>w.IsToday).ToList(), "Todo Today");
             return 0;
 
 
