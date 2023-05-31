@@ -5,36 +5,36 @@ namespace TodoTrack.TodoDataSource
     /// <summary>
     /// this is temporary use case.
     /// </summary>
-    public class TodoSourceRepo : ITodoRepo
+    public class ProjectSourceRepo : IProjectRepo
     {
         private readonly SQLiteDbContext _dbContext;
-        public TodoSourceRepo()
+        public ProjectSourceRepo()
         {
             _dbContext = new SQLiteDbContext();
             //_dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
         }
         //TODO: USE DTO TO MAKE ID IMUTTABLE
-        public async Task<TodoItem> CreateAsync(TodoItem item)
+        public async Task<Project> CreateAsync(Project item)
         {
             item.Id = Guid.NewGuid().ToString();
-            _dbContext.TodoItems.Add(item);
+            _dbContext.Projects.Add(item);
             await _dbContext.SaveChangesAsync();
             return item;
         }
 
         public async Task<bool> DeleteAsync(string id)
         {
-            var item = _dbContext.TodoItems.Find(id);
+            var item = _dbContext.Projects.Find(id);
             if (item == null) return false;
-            _dbContext.TodoItems.Remove(item);
+            _dbContext.Projects.Remove(item);
             await _dbContext.SaveChangesAsync(true);
             return true;
         }
 
-        public async Task<IQueryable<TodoItem>> GetAsync()
+        public async Task<IQueryable<Project>> GetAsync()
         {
-            return await Task.FromResult(_dbContext.TodoItems);
+            return await Task.FromResult(_dbContext.Projects);
         }
 
         public async Task<bool> PostNewEntriesAsync(IEnumerable<ProcessPeriod> workFromProcesses)
@@ -44,9 +44,9 @@ namespace TodoTrack.TodoDataSource
             return true;
         }
 
-        public async Task<bool> UpdateAsync(string id, TodoItem item)
+        public async Task<bool> UpdateAsync(string id, Project item)
         {
-            var target = _dbContext.TodoItems.Find(id);
+            var target = _dbContext.Projects.Find(id);
             if (target == null) return false;
             _dbContext.Entry(target).CurrentValues.SetValues(item);
             await _dbContext.SaveChangesAsync();

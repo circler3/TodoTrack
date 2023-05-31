@@ -1,5 +1,4 @@
-﻿using ForegroundTimeTracker.Models;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,15 +9,15 @@ namespace ForegroundTimeTracker
 {
     public class Arrangement : IArrangement
     {
-        private readonly IWorkFromProcessRepo _workFromProcessRepo;
         private readonly ITodoRepo _todoRepo;
+        private readonly IProcessPeriodRepo _processPeriodRepo;
 
         private Queue<ProcessPeriod> _workQueue { get; init; }
-        public Arrangement(IWorkFromProcessRepo workFromProcessRepo, ITodoRepo todoRepo)
+        public Arrangement( ITodoRepo todoRepo, IProcessPeriodRepo processPeriodRepo)
         {
             _workQueue = new();
-            _workFromProcessRepo = workFromProcessRepo;
             _todoRepo = todoRepo;
+            _processPeriodRepo = processPeriodRepo;
         }
 
         public bool Enqueue(ProcessPeriod process)
@@ -56,7 +55,8 @@ namespace ForegroundTimeTracker
             }
             //For test
             TestOutputResult(workList);
-            await _workFromProcessRepo.PostNewEntriesAsync(workList);
+            foreach (var work in workList) 
+                await _processPeriodRepo.CreateAsync(work);
             //TODO: Todo management is server side only
             //Match(workList, await _todoRepo.GetTodayTodoItemsAsync(), await _todoRepo.GetCurrentTodoItemAsync());
         }

@@ -19,7 +19,6 @@ namespace ForegroundTimeTracker
                 {
                     services.AddSingleton<IArrangement, Arrangement>();
                     services.AddSingleton<ITodoRepo, TodoSourceRepo>();
-                    services.AddTransient<IWorkFromProcessRepo, TodoSourceRepo>();
                     services.AddHostedService<AggregationWorker>();
                     services.AddHostedService<MonitorWorker>();
                 });

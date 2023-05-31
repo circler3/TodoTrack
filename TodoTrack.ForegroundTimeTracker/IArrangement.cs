@@ -1,5 +1,5 @@
-﻿using ForegroundTimeTracker.Models;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using TodoTrack.Contracts;
 
 namespace ForegroundTimeTracker
 {

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TodoTrack.Contracts
 {
-    public interface ITodoRepo : IRepo<TodoItem>
+    public interface IProjectRepo : IRepo<Project>
     {
+
     }
 }

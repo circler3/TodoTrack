@@ -5,48 +5,41 @@ namespace TodoTrack.TodoDataSource
     /// <summary>
     /// this is temporary use case.
     /// </summary>
-    public class TodoSourceRepo : ITodoRepo
+    public class ProcessPeriodSourceRepo : IProcessPeriodRepo
     {
         private readonly SQLiteDbContext _dbContext;
-        public TodoSourceRepo()
+        public ProcessPeriodSourceRepo()
         {
             _dbContext = new SQLiteDbContext();
             //_dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
         }
         //TODO: USE DTO TO MAKE ID IMUTTABLE
-        public async Task<TodoItem> CreateAsync(TodoItem item)
+        public async Task<ProcessPeriod> CreateAsync(ProcessPeriod item)
         {
             item.Id = Guid.NewGuid().ToString();
-            _dbContext.TodoItems.Add(item);
+            _dbContext.ProcessPeriods.Add(item);
             await _dbContext.SaveChangesAsync();
             return item;
         }
 
         public async Task<bool> DeleteAsync(string id)
         {
-            var item = _dbContext.TodoItems.Find(id);
+            var item = _dbContext.ProcessPeriods.Find(id);
             if (item == null) return false;
-            _dbContext.TodoItems.Remove(item);
+            _dbContext.ProcessPeriods.Remove(item);
             await _dbContext.SaveChangesAsync(true);
             return true;
         }
 
-        public async Task<IQueryable<TodoItem>> GetAsync()
+        public async Task<IQueryable<ProcessPeriod>> GetAsync()
         {
-            return await Task.FromResult(_dbContext.TodoItems);
+            return await Task.FromResult(_dbContext.ProcessPeriods);
         }
 
-        public async Task<bool> PostNewEntriesAsync(IEnumerable<ProcessPeriod> workFromProcesses)
+        public async Task<bool> UpdateAsync(string id, ProcessPeriod item)
         {
-            _dbContext.ProcessPeriods.AddRange(workFromProcesses);
-            await _dbContext.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> UpdateAsync(string id, TodoItem item)
-        {
-            var target = _dbContext.TodoItems.Find(id);
+            var target = _dbContext.ProcessPeriods.Find(id);
             if (target == null) return false;
             _dbContext.Entry(target).CurrentValues.SetValues(item);
             await _dbContext.SaveChangesAsync();

@@ -14,16 +14,18 @@ namespace TodoTrack.Cli
         private readonly KeyedList<IndexedTodoItem> _todoItems;
         private string _focusId = "";
         private readonly ITodoRepo _todoRepo;
+        private readonly IProjectRepo _projectRepo;
         private readonly IMapper _mapper;
 
-        public TodoHolder(ITodoRepo todoRepo, IMapper mapper)
+        public TodoHolder(ITodoRepo todoRepo, IProjectRepo projectRepo, IMapper mapper)
         {
             _todoItems = new();
             _todoRepo = todoRepo;
+            _projectRepo = projectRepo;
             _mapper = mapper;
             int i = 0;
-            _todoItems.AddRange(todoRepo.GetTodayTodoItemsAsync().Result
-                .OrderByDescending(w => w.ScheduledDueTimestamp).Select(w =>
+            _todoItems.AddRange(todoRepo.GetAsync().Result
+                .OrderByDescending(w => w.ScheduledDueTimestamp).ToList().Select(w =>
                 {
                     var result = mapper.Map<IndexedTodoItem>(w);
                     result.Index = i++;
@@ -41,7 +43,7 @@ namespace TodoTrack.Cli
 
         internal async Task<IndexedTodoItem> CreateTodoItemAsync(TodoItem item)
         {
-            var todo = await _todoRepo.CreateTodoItemAsync(item);
+            var todo = await _todoRepo.CreateAsync(item);
             var iTodo = _mapper.Map<IndexedTodoItem>(todo);
             iTodo.Index = _todoItems.Count;
             _todoItems.Add(iTodo);
@@ -50,7 +52,7 @@ namespace TodoTrack.Cli
 
         internal async Task<Project?> GetProjectFromNameAsync(string value)
         {
-            return await _todoRepo.GetProjectFromNameAsync(value);
+            return (await _projectRepo.GetAsync()).SingleOrDefault(w => w.Id == value);
         }
 
         internal async Task SetFocusAsync(string todoId)
@@ -107,14 +109,14 @@ namespace TodoTrack.Cli
 
         private async Task UpdateTodoItemAsync(IndexedTodoItem item)
         {
-            await _todoRepo.UpdateTodoItemAsync(item.Id, item);
+            await _todoRepo.UpdateAsync(item.Id, item);
         }
 
         internal async Task DeleteTodoItemAsync(IEnumerable<string> deleteIds)
         {
             foreach (var item in deleteIds)
             {
-                await _todoRepo.DeleteTodoItemAsync(item);
+                await _todoRepo.DeleteAsync(item);
                 _todoItems.Remove(_todoItems.Single(w => w.Id == item));
             }
         }
