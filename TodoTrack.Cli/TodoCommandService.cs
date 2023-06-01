@@ -7,26 +7,15 @@ namespace TodoTrack.Cli
 {
     public class TodoCommandService : BackgroundService
     {
-        private readonly IServiceCollection _typeRegistrar;
         private readonly CommandApp _commandApp;
 
         public TodoCommandService(CommandApp commandApp)
         {
             _commandApp = commandApp;
-            //_typeRegistrar = serviceDescriptors;
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             Console.Clear();
-            //var commandApp = new CommandApp(new TypeRegistrar(_typeRegistrar));
-            //commandApp.Configure(config =>
-            //{
-
-            //    config.AddBranch<AddSettings>("add", add =>
-            //    {
-            //        add.AddCommand<AddTodoCommand>("todo");
-            //    });
-            //});
             while (!stoppingToken.IsCancellationRequested)
             {
                 Console.Write("> ");

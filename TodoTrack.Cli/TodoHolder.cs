@@ -16,9 +16,11 @@ namespace TodoTrack.Cli
         private readonly ITodoRepo _todoRepo;
         private readonly IProjectRepo _projectRepo;
         private readonly IMapper _mapper;
+        private readonly Dictionary<Type, IRepo> _repos;
 
         public TodoHolder(ITodoRepo todoRepo, IProjectRepo projectRepo, IMapper mapper)
         {
+            _repos = new();
             _todoItems = new();
             _todoRepo = todoRepo;
             _projectRepo = projectRepo;
@@ -32,6 +34,13 @@ namespace TodoTrack.Cli
                     return result;
                 }));
         }
+
+        internal IRepo<T> Set<T>()
+            where T : class, IEntity
+        {
+            return (IRepo<T>)_repos[typeof(T)];
+        }
+        
         internal List<IndexedTodoItem> TodoItems
         {
             get

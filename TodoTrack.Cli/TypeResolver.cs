@@ -12,7 +12,7 @@ namespace TodoTrack.Cli
             _provider = provider ?? throw new ArgumentNullException(nameof(provider));
         }
 
-        public object Resolve(Type type)
+        public object? Resolve(Type? type)
         {
             if (type == null)
             {

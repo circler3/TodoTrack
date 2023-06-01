@@ -5,15 +5,11 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TodoTrack.Cli.Commands
 {
-    public class RangeSettings : CommandSettings
-    {
-        [CommandArgument(0, "<Range>")]
-        public string RangeString { get; set; }
-    }
+
     /// <summary>
     /// delete a todo item from system.
     /// </summary>
-    public class DelCommand : AsyncCommand<RangeSettings>
+    public class DelCommand<T> : AsyncCommand<RangeSettings>
     {
         private readonly TodoHolder _todoHolder;
 

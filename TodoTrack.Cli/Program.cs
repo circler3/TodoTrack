@@ -19,17 +19,6 @@ namespace TodoTrack.Cli
     Host.CreateDefaultBuilder(args)
         .ConfigureServices((hostContext, services) =>
         {
-            //services.AddCommandParser(options =>
-            //{
-            //    options.AddCommand<NewCommand>("new");
-            //    options.AddCommand<DelCommand>("del");
-            //    options.AddCommand<ListCommand>("list");
-            //    options.AddCommand<StartCommand>("start");
-            //    options.AddCommand<FinishCommand>("finish");
-            //    options.AddCommand<StopCommand>("stop");
-            //    options.AddCommand<AddTodoCommand>("add");
-            //    options.AddCommand<RemoveCommand>("remove");
-            //});
             services.AddAutoMapper(options =>
             {
                 options.CreateMap<TodoItem, IndexedTodoItem>();
@@ -48,10 +37,17 @@ namespace TodoTrack.Cli
                 app.Configure(config =>
                 {
                     config.CaseSensitivity(CaseSensitivity.None);
-                    config.AddCommand<DelCommand>("del");
-                    config.AddBranch<AddSettings>("add", add =>
+                    config.AddBranch<MethodSettings>("del", del =>
+                    {
+                        del.AddCommand<AddTodoCommand>("todo");
+                        del.AddCommand<AddTodoCommand>("proj");
+                        del.AddCommand<AddTodoCommand>("tag");
+                    });
+                    config.AddBranch<MethodSettings>("add", add =>
                     {
                         add.AddCommand<AddTodoCommand>("todo");
+                        add.AddCommand<AddTodoCommand>("proj");
+                        add.AddCommand<AddTodoCommand>("tag");
                     });
                 });
                 return app;
