@@ -24,12 +24,12 @@ namespace TodoTrack.Cli.Helpers
                     });
                     config.AddBranch<MethodSettings>("new", add =>
                     {
-                        add.SetDefaultCommand<NewCommand>();
-                        add.AddCommand<NewCommand>("todo");
+                        add.SetDefaultCommand<NewTodoCommand>();
+                        add.AddCommand<NewTodoCommand>("todo");
                         //todo: build
-                        add.AddCommand<NewCommand>("pro");
+                        add.AddCommand<NewTodoCommand>("pro");
                         //todo: build
-                        add.AddCommand<NewCommand>("tag");
+                        add.AddCommand<NewTodoCommand>("tag");
                     });
                     config.AddBranch<MethodSettings>("list", list =>
                     {

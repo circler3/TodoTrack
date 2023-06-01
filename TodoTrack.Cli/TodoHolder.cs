@@ -10,6 +10,7 @@ using TodoTrack.Contracts;
 
 namespace TodoTrack.Cli
 {
+    //TODO: should be configured via interface
     public class TodoHolder
     {
         private readonly KeyedList<IndexedTodoItem> _todoItems;
@@ -34,7 +35,7 @@ namespace TodoTrack.Cli
                 }));
         }
 
-        internal static Type GetEntityType(IRepo obj)
+        private static Type GetEntityType(IRepo obj)
         {
             var repoInterface = obj.GetType().GetInterfaces().FirstOrDefault(w => w.IsGenericType
             && w.GetGenericTypeDefinition() == typeof(IRepo<>));
@@ -42,24 +43,31 @@ namespace TodoTrack.Cli
             return repoInterface.GenericTypeArguments[0];
         }
 
-        internal IRepo<T> Set<T>()
+        private IRepo<T> Repo<T>()
             where T : class, IEntity
         {
             return (IRepo<T>)_repos[typeof(T)];
         }
 
-        internal List<IndexedTodoItem> TodoItems
+        internal async Task<IList<IndexedTodoItem>> GetTodoItemsAsync()
         {
-            get
-            {
-                SetFocusAsync(_focusId);
-                return _todoItems;
-            }
+            await SetFocusAsync(_focusId);
+            return _todoItems;
+        }
+
+        internal async Task<IList<Project>> GetProjectAsync()
+        {
+            return (await Repo<Project>().GetAsync()).ToList();
+        }
+
+        internal async Task<IList<Tag>> GetTagAsync()
+        {
+            return (await Repo<Tag>().GetAsync()).ToList();
         }
 
         internal async Task<IndexedTodoItem> CreateTodoItemAsync(TodoItem item)
         {
-            var todo = await Set<TodoItem>().CreateAsync(item);
+            var todo = await Repo<TodoItem>().CreateAsync(item);
             var iTodo = _mapper.Map<IndexedTodoItem>(todo);
             iTodo.Index = _todoItems.Count;
             _todoItems.Add(iTodo);
@@ -68,7 +76,7 @@ namespace TodoTrack.Cli
 
         internal async Task<Project?> GetProjectFromNameAsync(string value)
         {
-            return (await Set<Project>().GetAsync()).SingleOrDefault(w => w.Id == value);
+            return (await Repo<Project>().GetAsync()).SingleOrDefault(w => w.Id == value);
         }
 
         internal async Task SetFocusAsync(string todoId)
@@ -82,7 +90,7 @@ namespace TodoTrack.Cli
                     if (_focusId != item.Id)
                     {
                         item.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
-                        await UpdateTodoItemAsync(item);
+                        await UpdateAsync(item);
                     }
                     _focusId = item.Id;
                 }
@@ -98,7 +106,7 @@ namespace TodoTrack.Cli
             item.IsFocus = false;
             item.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
             _focusId = "";
-            await UpdateTodoItemAsync(item);
+            await UpdateAsync(item);
         }
 
         internal async Task AddTodayItemsAsync(IEnumerable<string> addIds)
@@ -127,17 +135,7 @@ namespace TodoTrack.Cli
 
         private async Task UpdateTodoItemAsync(IndexedTodoItem item)
         {
-            await Set<TodoItem>().UpdateAsync(item.Id, item);
-        }
-
-        internal async Task DeleteAsync<T>(IEnumerable<string> deleteIds)
-            where T : class, IEntity
-        {
-            foreach (var item in deleteIds)
-            {
-                await Set<T>().DeleteAsync(item);
-                if (typeof(T) == typeof(TodoItem)) _todoItems.Remove(_todoItems.Single(w => w.Id == item));
-            }
+            await Repo<TodoItem>().UpdateAsync(item.Id, item);
         }
 
         internal async Task StartTodoItemAsync(IEnumerable<string> ids)
@@ -198,10 +196,32 @@ namespace TodoTrack.Cli
                     Console.WriteLine("Invalid index. Cannot start Todo item");
             }
         }
-        internal async Task<IList<IndexedTodoItem>> GetAllTodoListAsync()
+
+        internal async Task<TEntity> CreateAsync<TEntity>(TEntity item)
+            where TEntity : class, IEntity
         {
-            return await Task.FromResult(_todoItems);
+           return await Repo<TEntity>().CreateAsync(item);
         }
 
+        internal async Task<IQueryable<TEntity>> GetAsync<TEntity>()
+    where TEntity : class, IEntity
+        {
+            return await Repo<TEntity>().GetAsync();
+        }
+        internal async Task UpdateAsync<TEntity>(TEntity entity)
+    where TEntity : class, IEntity
+        {
+            await Repo<TEntity>().UpdateAsync(entity.Id, entity);
+        }
+
+        internal async Task DeleteAsync<TEntity>(IEnumerable<string> deleteIds)
+    where TEntity : class, IEntity
+        {
+            foreach (var item in deleteIds)
+            {
+                await Repo<TEntity>().DeleteAsync(item);
+                if (typeof(TEntity) == typeof(TodoItem)) _todoItems.Remove(_todoItems.Single(w => w.Id == item));
+            }
+        }
     }
 }

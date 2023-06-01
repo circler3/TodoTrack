@@ -1,6 +1,8 @@
 ﻿namespace TodoTrack.Contracts
 {
-    public class Attachment
+    public class Attachment : IEntity
     {
+        public string Id { get ; set ; }
+        public string Name { get ; set; }
     }
 }

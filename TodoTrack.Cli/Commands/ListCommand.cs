@@ -22,12 +22,12 @@ namespace TodoTrack.Cli.Commands
             switch (settings?.RangeString?.ToLower())
             {
                 case "all":
-                    TableOutputHelper.BuildTable(await _todoHolder.GetAllTodoListAsync(), "Todo All");
+                    TableOutputHelper.BuildTable(await _todoHolder.GetTodoItemsAsync(), "Todo All");
                     break;
                 case "today":
                 case "now":
                 default:
-                    TableOutputHelper.BuildTable(_todoHolder.TodoItems.Where(w => w.IsToday).ToList(), "Todo Today");
+                    TableOutputHelper.BuildTable((await _todoHolder.GetTodoItemsAsync()).Where(w => w.IsToday).ToList(), "Todo Today");
                     break;
             }
             return 0;

@@ -15,11 +15,11 @@ namespace TodoTrack.Cli.Commands
     /// <summary>
     /// add a new todo item into system.
     /// </summary>
-    public class NewCommand : AsyncCommand<RangeSettings>
+    public class NewTodoCommand : AsyncCommand<RangeSettings>
     {
         private readonly TodoHolder _todoHolder;
 
-        public NewCommand(TodoHolder todoHolder)
+        public NewTodoCommand(TodoHolder todoHolder)
         {
             _todoHolder = todoHolder;
         }
@@ -90,7 +90,7 @@ namespace TodoTrack.Cli.Commands
                 AnsiConsole.WriteException(e);
                 throw;
             }
-            TableOutputHelper.BuildTable(_todoHolder.TodoItems);
+            TableOutputHelper.BuildTable((await _todoHolder.GetTodoItemsAsync()));
             return 0;
         }
     }

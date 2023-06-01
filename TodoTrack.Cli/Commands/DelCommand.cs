@@ -24,7 +24,7 @@ namespace TodoTrack.Cli.Commands
         {
             try
             {
-                List<string> strList = RangeHelper.GetMatchedStringList(settings.RangeString, _todoHolder.TodoItems);
+                List<string> strList = RangeHelper.GetMatchedStringList(settings.RangeString, await _todoHolder.GetTodoItemsAsync());
                 await _todoHolder.DeleteAsync<T>(strList);
             }
             catch (Exception e)
@@ -32,7 +32,7 @@ namespace TodoTrack.Cli.Commands
                 AnsiConsole.WriteException(e);
                 throw;
             }
-            TableOutputHelper.BuildTable(_todoHolder.TodoItems, "Todo All");
+            TableOutputHelper.BuildTable((await _todoHolder.GetTodoItemsAsync()), "Todo All");
             return 0;
         }
     }
