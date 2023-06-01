@@ -1,5 +1,6 @@
 ﻿using Spectre.Console;
 using Spectre.Console.Cli;
+using TodoTrack.Contracts;
 
 namespace TodoTrack.Cli.Commands
 {
@@ -20,7 +21,7 @@ namespace TodoTrack.Cli.Commands
         {
             try
             {
-                List<string> strList = RangeHelper.GetMatchedStringList(settings.Project, _todoHolder.GetTodoItemsAsync());
+                List<string> strList = RangeHelper.GetMatchedStringList(settings.Project, (await _todoHolder.GetTodoItemsAsync()).OfType<IEntity>().ToList());
                 await _todoHolder.AddTodayItemsAsync(strList);
             }
             catch (Exception e)

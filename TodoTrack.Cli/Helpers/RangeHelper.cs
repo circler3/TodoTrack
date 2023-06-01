@@ -40,11 +40,6 @@ namespace TodoTrack.Cli
             return strList;
         }
 
-        internal static List<string> GetMatchedStringList(string rangeString, Task<IList<IndexedTodoItem>> task)
-        {
-            throw new NotImplementedException();
-        }
-
         private static Range? GetRange(string rangeString)
         {
             // Create the script options with the references and imports needed

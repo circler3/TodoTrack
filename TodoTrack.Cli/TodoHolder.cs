@@ -176,13 +176,14 @@ namespace TodoTrack.Cli
                 {
                     var currentDateStamp = TimestampHelper.CurrentDateStamp;
                     target.LatestWorkTimestamp = currentDateStamp;
-                    if (target.TodoPeriods.Count == 0) return;
-                    if (target.TodoPeriods[^1].Started) target.TodoPeriods[^1].EndTimestamp = currentDateStamp;
+                    if (target.TodoPeriods.Count != 0) 
+                        if (target.TodoPeriods[^1].Started) target.TodoPeriods[^1].EndTimestamp = currentDateStamp;
                     target.FinishedTimestamp = currentDateStamp;
                     //todo: recheck
                     if (currentDateStamp <= target.ScheduledDueTimestamp) target.Status = TodoStatus.FinishedOnTime;
                     else target.Status = TodoStatus.FinishedDelayed;
                     await UnsetFocusAsync(target.Id);
+                    await RemoveTodayTodoItemAsync(new[] { target.Id });
                 }
                 else
                     Console.WriteLine("Invalid index. Cannot start Todo item");

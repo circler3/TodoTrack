@@ -41,11 +41,11 @@ namespace TodoTrack.Cli.Helpers
                         list.AddCommand<ListCommand>("tag");
                     });
 
-                    config.AddCommand<FinishTodoCommand>("finish");
-                    config.AddCommand<StartTodoCommand>("start");
-                    config.AddCommand<StopTodoCommand>("stop");
-                    config.AddCommand<AddTodoCommand>("add");
-                    config.AddCommand<RemoveTodoCommand>("remove");
+                    config.AddCommand<FinishTodoCommand>("finish").WithAlias("f");
+                    config.AddCommand<StartTodoCommand>("start").WithAlias("b").WithAlias("begin");
+                    config.AddCommand<StopTodoCommand>("stop").WithAlias("s");
+                    config.AddCommand<AddTodoCommand>("add").WithAlias("a");
+                    config.AddCommand<RemoveTodoCommand>("remove").WithAlias("r");
                 });
                 return app;
 
