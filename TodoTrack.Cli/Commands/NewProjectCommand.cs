@@ -73,18 +73,13 @@ namespace TodoTrack.Cli.Commands
                 }
                 if (string.IsNullOrWhiteSpace(item.Name)) return -1;
                 await _todoHolder.CreateAsync(item);
-                //item.CreatedTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
-                //    item.ScheduledBeginTimestamp = TimestampHelper.CurrentDateStamp;
-                //    item.Status = TodoStatus.InProgress;
-                //var todo = await _todoHolder.CreateTodoItemAsync(item);
-                //if (instantFlag) await _todoHolder.SetFocusAsync(todo.Id);
             }
             catch (Exception e)
             {
                 AnsiConsole.WriteException(e);
                 throw;
             }
-            TableOutputHelper.BuildTable((await _todoHolder.GetTodoItemsAsync()));
+            TableOutputHelper.BuildTable((await _todoHolder.GetAsync<Project>()).ToList(), "Project List");
             return 0;
         }
     }

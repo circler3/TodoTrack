@@ -34,6 +34,9 @@ namespace ForegroundTimeTracker
             while (_workQueue.Count > 2)
             {
                 var process = _workQueue.Dequeue();
+                Console.WriteLine(lastWorkFromProcess.Name);
+                Console.WriteLine(lastWorkFromProcess.EndTimestamp);
+                Console.WriteLine(lastWorkFromProcess.StartTimestamp);
                 if (DateTimeOffset.FromUnixTimeSeconds(lastWorkFromProcess.EndTimestamp).Day != DateTimeOffset.FromUnixTimeSeconds(lastWorkFromProcess.StartTimestamp).Day)
                 {
                     // additional workitem generate. split it into two individual units.

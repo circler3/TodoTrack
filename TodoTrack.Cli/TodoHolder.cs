@@ -3,6 +3,7 @@ using AutoMapper.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,16 +18,18 @@ namespace TodoTrack.Cli
         private string _focusId = "";
         private readonly IMapper _mapper;
         private readonly Dictionary<Type, IRepo> _repos;
+        private readonly Dictionary<Type, IList<IEntity>> _set;
 
         public TodoHolder(IRepo<TodoItem> todoRepo, IRepo<Project> projectRepo, IMapper mapper)
         {
+            _set = new();
             _repos = new();
             _todoItems = new();
             _repos[GetEntityType(todoRepo)] = todoRepo;
             _repos[GetEntityType(projectRepo)] = projectRepo;
             _mapper = mapper;
             int i = 0;
-            _todoItems.AddRange(todoRepo.GetAsync().Result
+            _todoItems.AddRange(GetAsync<TodoItem>().Result
                 .OrderByDescending(w => w.ScheduledDueTimestamp).ToList().Select(w =>
                 {
                     var result = mapper.Map<IndexedTodoItem>(w);
@@ -47,6 +50,13 @@ namespace TodoTrack.Cli
             where T : class, IEntity
         {
             return (IRepo<T>)_repos[typeof(T)];
+        }
+
+        public IList<T>? Set<T>()
+            where T : class, IEntity
+        {
+            if(!_set.ContainsKey(typeof(T))) return null;
+            return _set[typeof(T)].OfType<T>().ToList();
         }
 
         internal async Task<IList<IndexedTodoItem>> GetTodoItemsAsync()
@@ -90,7 +100,7 @@ namespace TodoTrack.Cli
                     if (_focusId != item.Id)
                     {
                         item.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
-                        await UpdateAsync(item);
+                        await UpdateTodoItemAsync(item);
                     }
                     _focusId = item.Id;
                 }
@@ -106,7 +116,7 @@ namespace TodoTrack.Cli
             item.IsFocus = false;
             item.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
             _focusId = "";
-            await UpdateAsync(item);
+            await UpdateTodoItemAsync(item);
         }
 
         internal async Task AddTodayItemsAsync(IEnumerable<string> addIds)
@@ -206,6 +216,7 @@ namespace TodoTrack.Cli
         internal async Task<IQueryable<TEntity>> GetAsync<TEntity>()
     where TEntity : class, IEntity
         {
+            _set[typeof(TEntity)] = (await Repo<TEntity>().GetAsync()).OfType<IEntity>().ToList();
             return await Repo<TEntity>().GetAsync();
         }
         internal async Task UpdateAsync<TEntity>(TEntity entity)

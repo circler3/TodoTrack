@@ -1,6 +1,7 @@
 ﻿using Spectre.Console;
 using Spectre.Console.Cli;
 using System.Diagnostics.CodeAnalysis;
+using TodoTrack.Contracts;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TodoTrack.Cli.Commands
@@ -21,7 +22,7 @@ namespace TodoTrack.Cli.Commands
         {
             try
             {
-                List<string> strList = RangeHelper.GetMatchedStringList(settings.Project, await _todoHolder.GetTodoItemsAsync());
+                List<string> strList = RangeHelper.GetMatchedStringList(settings.Project, (await _todoHolder.GetTodoItemsAsync()).OfType<IEntity>().ToList());
                 await _todoHolder.StartTodoItemAsync(strList);
             }
             catch (Exception e)

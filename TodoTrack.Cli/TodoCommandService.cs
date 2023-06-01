@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Spectre.Console.Cli;
 using TodoTrack.Cli.Commands;
+using TodoTrack.Contracts;
 
 namespace TodoTrack.Cli
 {

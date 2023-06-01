@@ -22,12 +22,15 @@ namespace TodoTrack.Cli
             return _provider.GetService(type);
         }
 
+        /// <summary>
+        /// ServiceProvider as a singleton to run longtime.
+        /// </summary>
         public void Dispose()
         {
-            if (_provider is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
+            //if (_provider is IDisposable disposable)
+            //{
+            //    disposable.Dispose();
+            //}
         }
     }
 }

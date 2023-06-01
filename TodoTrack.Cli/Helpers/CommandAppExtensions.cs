@@ -9,7 +9,7 @@ namespace TodoTrack.Cli.Helpers
     {
         internal static IServiceCollection AddCommandApp(this IServiceCollection services)
         {
-            return services.AddTransient(w =>
+            return services.AddSingleton(w =>
             {
                 var app = new CommandApp(new TypeRegistrar(services));
                 app.Configure(config =>

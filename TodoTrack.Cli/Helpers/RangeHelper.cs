@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TodoTrack.Contracts;
 
 namespace TodoTrack.Cli
 {
     internal class RangeHelper
     {
-        public static List<string> GetMatchedStringList(string command, IList<IndexedTodoItem> indexedTodoItems)
+        public static List<string> GetMatchedStringList(string command, IList<IEntity> indexedTodoItems)
         {
             var todoIdToDelete = command.Split(' ');
             var strList = new List<string>();

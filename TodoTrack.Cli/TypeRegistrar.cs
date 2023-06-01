@@ -1,16 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TodoTrack.Cli
 {
     public sealed class TypeRegistrar : ITypeRegistrar
     {
         private readonly IServiceCollection _builder;
+        private ITypeResolver _typeResolver;
 
         public TypeRegistrar(IServiceCollection builder)
         {
@@ -19,7 +15,7 @@ namespace TodoTrack.Cli
 
         public ITypeResolver Build()
         {
-            return new TypeResolver(_builder.BuildServiceProvider());
+            return _typeResolver ??= new TypeResolver(_builder.BuildServiceProvider());
         }
 
         public void Register(Type service, Type implementation)
