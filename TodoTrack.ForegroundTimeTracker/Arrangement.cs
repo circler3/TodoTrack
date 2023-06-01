@@ -9,11 +9,11 @@ namespace ForegroundTimeTracker
 {
     public class Arrangement : IArrangement
     {
-        private readonly ITodoRepo _todoRepo;
-        private readonly IProcessPeriodRepo _processPeriodRepo;
+        private readonly IRepo<TodoItem> _todoRepo;
+        private readonly IRepo<ProcessPeriod> _processPeriodRepo;
 
         private Queue<ProcessPeriod> _workQueue { get; init; }
-        public Arrangement( ITodoRepo todoRepo, IProcessPeriodRepo processPeriodRepo)
+        public Arrangement(IRepo<TodoItem> todoRepo, IRepo<ProcessPeriod> processPeriodRepo)
         {
             _workQueue = new();
             _todoRepo = todoRepo;

@@ -8,13 +8,14 @@ using System.Reflection;
 using System.Data;
 using System.Text;
 using Microsoft.Extensions.Primitives;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TodoTrack.Cli.Commands
 {
     /// <summary>
     /// add a new todo item into system.
     /// </summary>
-    public class NewCommand : ITodoCommand
+    public class NewCommand : AsyncCommand<RangeSettings>
     {
         private readonly TodoHolder _todoHolder;
 
@@ -22,9 +23,9 @@ namespace TodoTrack.Cli.Commands
         {
             _todoHolder = todoHolder;
         }
-        public async Task<int> ExecuteAsync([NotNull] string command)
+        public override async Task<int> ExecuteAsync(CommandContext context, RangeSettings settings)
         {
-            string input = command;
+            string input = settings.RangeString;
             string pattern = @"(^|[$\-#%*/&])(\S+)";
 
             try
@@ -92,7 +93,5 @@ namespace TodoTrack.Cli.Commands
             TableOutputHelper.BuildTable(_todoHolder.TodoItems);
             return 0;
         }
-
-
     }
 }

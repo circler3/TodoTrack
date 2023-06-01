@@ -18,10 +18,10 @@ namespace ForegroundTimeTracker
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<IArrangement, Arrangement>();
-                    services.AddTransient<ITodoRepo, TodoSourceRepo>();
-                    services.AddTransient<ITagRepo, TagSourceRepo>();
-                    services.AddTransient<IProjectRepo, ProjectSourceRepo>();
-                    services.AddTransient<IProcessPeriodRepo, ProcessPeriodSourceRepo>();
+                    services.AddTransient<IRepo<TodoItem>, TodoSourceRepo>();
+                    services.AddTransient<IRepo<Tag>, TagSourceRepo>();
+                    services.AddTransient<IRepo<Project>, ProjectSourceRepo>();
+                    services.AddTransient<IRepo<ProcessPeriod>, ProcessPeriodSourceRepo>();
                     services.AddHostedService<AggregationWorker>();
                     services.AddHostedService<MonitorWorker>();
                 });

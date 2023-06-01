@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,12 @@ namespace TodoTrack.Cli
         private readonly IMapper _mapper;
         private readonly Dictionary<Type, IRepo> _repos;
 
-        public TodoHolder(ITodoRepo todoRepo, IProjectRepo projectRepo, IMapper mapper)
+        public TodoHolder(IRepo<TodoItem> todoRepo, IRepo<Project> projectRepo, IMapper mapper)
         {
             _repos = new();
             _todoItems = new();
-            _repos[todoRepo.GetType()] = todoRepo;
-            _repos[projectRepo.GetType()] = projectRepo;
+            _repos[GetEntityType(todoRepo)] = todoRepo;
+            _repos[GetEntityType(projectRepo)] = projectRepo;
             _mapper = mapper;
             int i = 0;
             _todoItems.AddRange(todoRepo.GetAsync().Result
@@ -31,6 +32,14 @@ namespace TodoTrack.Cli
                     result.Index = i++;
                     return result;
                 }));
+        }
+
+        internal static Type GetEntityType(IRepo obj)
+        {
+            var repoInterface = obj.GetType().GetInterfaces().FirstOrDefault(w => w.IsGenericType
+            && w.GetGenericTypeDefinition() == typeof(IRepo<>));
+            ArgumentNullException.ThrowIfNull(repoInterface);
+            return repoInterface.GenericTypeArguments[0];
         }
 
         internal IRepo<T> Set<T>()
@@ -121,12 +130,13 @@ namespace TodoTrack.Cli
             await Set<TodoItem>().UpdateAsync(item.Id, item);
         }
 
-        internal async Task DeleteTodoItemAsync(IEnumerable<string> deleteIds)
+        internal async Task DeleteAsync<T>(IEnumerable<string> deleteIds)
+            where T : class, IEntity
         {
             foreach (var item in deleteIds)
             {
-                await Set<TodoItem>().DeleteAsync(item);
-                _todoItems.Remove(_todoItems.Single(w => w.Id == item));
+                await Set<T>().DeleteAsync(item);
+                if (typeof(T) == typeof(TodoItem)) _todoItems.Remove(_todoItems.Single(w => w.Id == item));
             }
         }
 

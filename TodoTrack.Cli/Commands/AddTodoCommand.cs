@@ -1,16 +1,13 @@
 ﻿using Spectre.Console;
 using Spectre.Console.Cli;
-using System.Diagnostics.CodeAnalysis;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TodoTrack.Cli.Commands
 {
 
-
     /// <summary>
     /// add a todo item to schedule today from system.
     /// </summary>
-    public class AddTodoCommand : AsyncCommand<BuildStringSettings>
+    public class AddTodoCommand : AsyncCommand<MethodSettings>
     {
         private readonly TodoHolder _todoHolder;
 
@@ -19,11 +16,11 @@ namespace TodoTrack.Cli.Commands
             _todoHolder = todoHolder;
         }
 
-        public override async Task<int> ExecuteAsync(CommandContext context, BuildStringSettings settings)
+        public override async Task<int> ExecuteAsync(CommandContext context, MethodSettings settings)
         {
             try
             {
-                List<string> strList = RangeHelper.GetMatchedStringList(settings.BuildString, _todoHolder.TodoItems);
+                List<string> strList = RangeHelper.GetMatchedStringList(settings.Project, _todoHolder.TodoItems);
                 await _todoHolder.AddTodayItemsAsync(strList);
             }
             catch (Exception e)

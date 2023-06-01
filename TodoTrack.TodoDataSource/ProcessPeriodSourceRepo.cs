@@ -5,7 +5,7 @@ namespace TodoTrack.TodoDataSource
     /// <summary>
     /// this is temporary use case.
     /// </summary>
-    public class ProcessPeriodSourceRepo : IProcessPeriodRepo
+    public class ProcessPeriodSourceRepo : IRepo<ProcessPeriod>
     {
         private readonly SQLiteDbContext _dbContext;
         public ProcessPeriodSourceRepo()

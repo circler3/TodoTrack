@@ -1,6 +1,7 @@
 ﻿using Spectre.Console;
 using Spectre.Console.Cli;
 using System.Diagnostics.CodeAnalysis;
+using TodoTrack.Contracts;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TodoTrack.Cli.Commands
@@ -10,6 +11,7 @@ namespace TodoTrack.Cli.Commands
     /// delete a todo item from system.
     /// </summary>
     public class DelCommand<T> : AsyncCommand<RangeSettings>
+        where T : class, IEntity
     {
         private readonly TodoHolder _todoHolder;
 
@@ -23,7 +25,7 @@ namespace TodoTrack.Cli.Commands
             try
             {
                 List<string> strList = RangeHelper.GetMatchedStringList(settings.RangeString, _todoHolder.TodoItems);
-                await _todoHolder.DeleteTodoItemAsync(strList);
+                await _todoHolder.DeleteAsync<T>(strList);
             }
             catch (Exception e)
             {

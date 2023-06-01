@@ -1,12 +1,14 @@
-﻿using System.Data;
+﻿using Spectre.Console.Cli;
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TodoTrack.Cli.Commands
 {
     /// <summary>
     /// list all/today todo items from system.
     /// </summary>
-    public class ListCommand : ITodoCommand
+    public class ListCommand : AsyncCommand<RangeSettings>
     {
         private readonly TodoHolder _todoHolder;
 
@@ -14,9 +16,10 @@ namespace TodoTrack.Cli.Commands
         {
             _todoHolder = todoHolder;
         }
-        public async Task<int> ExecuteAsync([NotNull] string command)
+
+        public override async Task<int> ExecuteAsync(CommandContext context, RangeSettings settings)
         {
-            switch (command.ToLower())
+            switch (settings?.RangeString?.ToLower())
             {
                 case "all":
                     TableOutputHelper.BuildTable(await _todoHolder.GetAllTodoListAsync(), "Todo All");
@@ -29,7 +32,5 @@ namespace TodoTrack.Cli.Commands
             }
             return 0;
         }
-
-
     }
 }

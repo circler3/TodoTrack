@@ -5,7 +5,7 @@ namespace TodoTrack.TodoDataSource
     /// <summary>
     /// this is temporary use case.
     /// </summary>
-    public class ProjectSourceRepo : IProjectRepo
+    public class ProjectSourceRepo : IRepo<Project>
     {
         private readonly SQLiteDbContext _dbContext;
         public ProjectSourceRepo()

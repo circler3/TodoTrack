@@ -5,7 +5,7 @@ namespace TodoTrack.TodoDataSource
     /// <summary>
     /// this is temporary use case.
     /// </summary>
-    public class TagSourceRepo : ITagRepo
+    public class TagSourceRepo : IRepo<Tag>
     {
         private readonly SQLiteDbContext _dbContext;
         public TagSourceRepo()

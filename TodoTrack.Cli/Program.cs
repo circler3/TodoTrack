@@ -23,10 +23,10 @@ namespace TodoTrack.Cli
             {
                 options.CreateMap<TodoItem, IndexedTodoItem>();
             }); 
-            services.AddTransient<ITodoRepo, TodoSourceRepo>();
-            services.AddTransient<ITagRepo, TagSourceRepo>();
-            services.AddTransient<IProjectRepo, ProjectSourceRepo>();
-            services.AddTransient<IProcessPeriodRepo, ProcessPeriodSourceRepo>();
+            services.AddTransient<IRepo<TodoItem>, TodoSourceRepo>();
+            services.AddTransient<IRepo<Tag>, TagSourceRepo>();
+            services.AddTransient<IRepo<Project>, ProjectSourceRepo>();
+            services.AddTransient<IRepo<ProcessPeriod>, ProcessPeriodSourceRepo>();
             services.AddSingleton<TodoHolder>();
 
 
@@ -39,16 +39,35 @@ namespace TodoTrack.Cli
                     config.CaseSensitivity(CaseSensitivity.None);
                     config.AddBranch<MethodSettings>("del", del =>
                     {
-                        del.AddCommand<AddTodoCommand>("todo");
-                        del.AddCommand<AddTodoCommand>("proj");
-                        del.AddCommand<AddTodoCommand>("tag");
+                        del.SetDefaultCommand<DelCommand<TodoItem>>();
+                        del.AddCommand<DelCommand<TodoItem>>("todo");
+                        del.AddCommand<DelCommand<Project>>("pro");
+                        del.AddCommand<DelCommand<Tag>>("tag");
                     });
-                    config.AddBranch<MethodSettings>("add", add =>
+                    config.AddBranch<MethodSettings>("new", add =>
                     {
-                        add.AddCommand<AddTodoCommand>("todo");
-                        add.AddCommand<AddTodoCommand>("proj");
-                        add.AddCommand<AddTodoCommand>("tag");
+                        add.SetDefaultCommand<NewCommand>();
+                        add.AddCommand<NewCommand>("todo");
+                        //todo: build
+                        add.AddCommand<NewCommand>("pro");
+                        //todo: build
+                        add.AddCommand<NewCommand>("tag");
                     });
+                    config.AddBranch<MethodSettings>("list", list=>
+                    {
+                        list.SetDefaultCommand<ListCommand>();
+                        list.AddCommand<ListCommand>("todo");
+                        //todo: build
+                        list.AddCommand<ListCommand>("pro");
+                        //todo: build
+                        list.AddCommand<ListCommand>("tag");
+                    });
+
+                    config.AddCommand<FinishTodoCommand>("finish");
+                    config.AddCommand<StartTodoCommand>("start");
+                    config.AddCommand<StopTodoCommand>("stop");
+                    config.AddCommand<AddTodoCommand>("add");
+                    config.AddCommand<RemoveTodoCommand>("remove");
                 });
                 return app;
 
