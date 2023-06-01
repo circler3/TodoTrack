@@ -29,10 +29,11 @@ namespace ForegroundTimeTracker
             var ignoreList = _configuration.GetSection("IgnoreProcessName").Get<string[]>();
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Delay(500, stoppingToken);
+                await Task.Delay(1000, stoppingToken);
 
                 var currentProcess = ProcessHelper.GetForegroundProcess();
-                if (currentProcess == null || string.IsNullOrWhiteSpace(currentProcess.MainWindowTitle)) { continue; }
+                //if (currentProcess == null || string.IsNullOrWhiteSpace(currentProcess.MainWindowTitle)) { continue; }
+                if (currentProcess == null) continue;
                 if (ignoreList?.Contains(currentProcess.ProcessName) ?? false) 
                     continue;
 
@@ -42,7 +43,7 @@ namespace ForegroundTimeTracker
                     _aggregationWorker.Enqueue(_lastProcess);
                     continue;
                 }
-                if(_lastProcess.ProcessId != currentProcess.Id || DateTimeOffset.Now.TimeOfDay < TimeSpan.FromSeconds(1))
+                if(_lastProcess.ProcessId != currentProcess.Id || DateTimeOffset.Now.TimeOfDay < TimeSpan.FromSeconds(2))
                 {
                     var currentWorkProcess = new ProcessPeriod(currentProcess);
                     _lastProcess.EndTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();

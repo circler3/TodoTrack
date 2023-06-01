@@ -9,14 +9,12 @@ namespace ForegroundTimeTracker
 {
     public class Arrangement : IArrangement
     {
-        private readonly IRepo<TodoItem> _todoRepo;
         private readonly IRepo<ProcessPeriod> _processPeriodRepo;
 
         private Queue<ProcessPeriod> _workQueue { get; init; }
         public Arrangement(IRepo<TodoItem> todoRepo, IRepo<ProcessPeriod> processPeriodRepo)
         {
             _workQueue = new();
-            _todoRepo = todoRepo;
             _processPeriodRepo = processPeriodRepo;
         }
 
@@ -34,9 +32,6 @@ namespace ForegroundTimeTracker
             while (_workQueue.Count > 2)
             {
                 var process = _workQueue.Dequeue();
-                Console.WriteLine(lastWorkFromProcess.Name);
-                Console.WriteLine(lastWorkFromProcess.EndTimestamp);
-                Console.WriteLine(lastWorkFromProcess.StartTimestamp);
                 if (DateTimeOffset.FromUnixTimeSeconds(lastWorkFromProcess.EndTimestamp).Day != DateTimeOffset.FromUnixTimeSeconds(lastWorkFromProcess.StartTimestamp).Day)
                 {
                     // additional workitem generate. split it into two individual units.
@@ -69,7 +64,10 @@ namespace ForegroundTimeTracker
             Console.Clear();
             Console.WriteLine("*****");
             Console.WriteLine("Writing Results:");
-            workList.ForEach(work => Console.WriteLine(work.Title + $":{work.Duration.TotalMinutes} min."));
+            Console.WriteLine($"Time consumption (Total {(workList[^1].EndTimestamp - workList[0].StartTimestamp) / 60f:F1} min) " +
+                $"since {DateTimeOffset.FromUnixTimeSeconds(workList[0].StartTimestamp).ToLocalTime():t} to {DateTimeOffset.FromUnixTimeSeconds(workList[^1].EndTimestamp).ToLocalTime():t}.");
+            Console.WriteLine("*****");
+            workList.ForEach(work => Console.WriteLine(work.Name + $" : {work.Duration.TotalMinutes:F2} min."));
             Console.WriteLine("*****");
         }
     }
