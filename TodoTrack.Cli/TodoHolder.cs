@@ -13,8 +13,6 @@ namespace TodoTrack.Cli
     {
         private readonly KeyedList<IndexedTodoItem> _todoItems;
         private string _focusId = "";
-        private readonly ITodoRepo _todoRepo;
-        private readonly IProjectRepo _projectRepo;
         private readonly IMapper _mapper;
         private readonly Dictionary<Type, IRepo> _repos;
 
@@ -22,8 +20,8 @@ namespace TodoTrack.Cli
         {
             _repos = new();
             _todoItems = new();
-            _todoRepo = todoRepo;
-            _projectRepo = projectRepo;
+            _repos[todoRepo.GetType()] = todoRepo;
+            _repos[projectRepo.GetType()] = projectRepo;
             _mapper = mapper;
             int i = 0;
             _todoItems.AddRange(todoRepo.GetAsync().Result
@@ -40,7 +38,7 @@ namespace TodoTrack.Cli
         {
             return (IRepo<T>)_repos[typeof(T)];
         }
-        
+
         internal List<IndexedTodoItem> TodoItems
         {
             get
@@ -52,7 +50,7 @@ namespace TodoTrack.Cli
 
         internal async Task<IndexedTodoItem> CreateTodoItemAsync(TodoItem item)
         {
-            var todo = await _todoRepo.CreateAsync(item);
+            var todo = await Set<TodoItem>().CreateAsync(item);
             var iTodo = _mapper.Map<IndexedTodoItem>(todo);
             iTodo.Index = _todoItems.Count;
             _todoItems.Add(iTodo);
@@ -61,7 +59,7 @@ namespace TodoTrack.Cli
 
         internal async Task<Project?> GetProjectFromNameAsync(string value)
         {
-            return (await _projectRepo.GetAsync()).SingleOrDefault(w => w.Id == value);
+            return (await Set<Project>().GetAsync()).SingleOrDefault(w => w.Id == value);
         }
 
         internal async Task SetFocusAsync(string todoId)
@@ -120,14 +118,14 @@ namespace TodoTrack.Cli
 
         private async Task UpdateTodoItemAsync(IndexedTodoItem item)
         {
-            await _todoRepo.UpdateAsync(item.Id, item);
+            await Set<TodoItem>().UpdateAsync(item.Id, item);
         }
 
         internal async Task DeleteTodoItemAsync(IEnumerable<string> deleteIds)
         {
             foreach (var item in deleteIds)
             {
-                await _todoRepo.DeleteAsync(item);
+                await Set<TodoItem>().DeleteAsync(item);
                 _todoItems.Remove(_todoItems.Single(w => w.Id == item));
             }
         }
