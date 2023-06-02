@@ -9,7 +9,7 @@ namespace TodoTrack.Cli.Commands
     /// <summary>
     /// add a todo item to schedule today from system.
     /// </summary>
-    public class StopTodoCommand : AsyncCommand<MethodSettings>
+    public class StopTodoCommand : AsyncCommand<TodoSettings>
     {
         private readonly TodoHolder _todoHolder;
 
@@ -18,11 +18,11 @@ namespace TodoTrack.Cli.Commands
             _todoHolder = todoHolder;
         }
 
-        public override async Task<int> ExecuteAsync(CommandContext context, MethodSettings settings)
+        public override async Task<int> ExecuteAsync(CommandContext context, TodoSettings settings)
         {
             try
             {
-                List<string> strList = RangeHelper.GetMatchedStringList(settings.Project, (await _todoHolder.GetTodoItemsAsync()).OfType<IEntity>().ToList());
+                List<string> strList = RangeHelper.GetMatchedStringList(settings.IndexString, _todoHolder.Set<TodoItem>().OfType<IEntity>().ToList());
                 await _todoHolder.StopTodoItemAsync(strList);
             }
             catch (Exception e)
@@ -30,7 +30,7 @@ namespace TodoTrack.Cli.Commands
                 AnsiConsole.WriteException(e);
                 throw;
             }
-            TableOutputHelper.BuildTable((await _todoHolder.GetTodoItemsAsync()).Where(w => w.IsToday).ToList(), "Todo Today");
+            TableOutputHelper.BuildTable((await _todoHolder.GetAsync<TodoItem>()).Where(w => w.IsToday).ToList(), "Todo Today");
             return 0;
         }
     }

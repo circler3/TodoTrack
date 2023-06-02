@@ -10,7 +10,7 @@ namespace TodoTrack.Contracts
     public class TodoItem : IEntity
     {
         [Key]
-        public virtual string Id { get; set; }= default!;
+        public virtual string Id { get; set; } = default!;
         public virtual string Name { get; set; } = string.Empty;
         public virtual string? Description { get; set; }
         public virtual string? Comment { get; set; }
@@ -33,12 +33,13 @@ namespace TodoTrack.Contracts
         public virtual bool Repeatable { get; set; } = false;
         public virtual TodoStatus Status { get; set; }
         public virtual EisenhowerMatrix Priority { get; set; }
+        public virtual bool IsFocus { get; set; } = false;
+        public virtual bool IsToday { get; set; } = false;
         [NotMapped]
         public virtual IList<WorkPeriod>? ProcessPeriods { get; set; } = new List<WorkPeriod>();
         [NotMapped]
         public virtual IList<WorkPeriod> TodoPeriods { get; set; } = new List<WorkPeriod>();
         [NotMapped]
         public virtual ICollection<Attachment>? Attachments { get; set; }
-
     }
 }

@@ -6,7 +6,7 @@ namespace TodoTrack.Cli
     public sealed class TypeRegistrar : ITypeRegistrar
     {
         private readonly IServiceCollection _builder;
-        private ITypeResolver _typeResolver;
+        private ITypeResolver? _typeResolver;
 
         public TypeRegistrar(IServiceCollection builder)
         {

@@ -32,7 +32,7 @@ namespace TodoTrack.Cli.Commands
                 AnsiConsole.WriteException(e);
                 throw;
             }
-            TableOutputHelper.BuildTable((await _todoHolder.GetTodoItemsAsync()), "Todo All");
+            TableOutputHelper.BuildTable((await _todoHolder.GetAsync<TodoItem>()).ToList(), "Todo All");
             return 0;
         }
     }

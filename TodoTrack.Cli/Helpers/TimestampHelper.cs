@@ -12,8 +12,7 @@ namespace TodoTrack.Cli
             string unitPart = timeString[^1..];
 
             // 解析数字部分为 double 类型
-            double numericValue;
-            if (!double.TryParse(numericPart, out numericValue))
+            if (!double.TryParse(numericPart, out double numericValue))
             {
                 throw new ArgumentException("Invalid time string: " + timeString);
             }

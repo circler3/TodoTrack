@@ -9,7 +9,7 @@ namespace TodoTrack.Contracts
 {
     public class ProcessPeriod : IEntity
     {
-#nullable disable
+#nullable disable warnings
         protected ProcessPeriod()
         {
             // For ORM ONLY

@@ -33,7 +33,7 @@ namespace TodoTrack.Cli.Commands
                 Project item = new();
                 MatchCollection matches = Regex.Matches(input, pattern);
 
-                foreach (Match m in matches)
+                foreach (Match m in matches.Cast<Match>())
                 {
                     string symbol = m.Groups[1].Value;
                     string value = m.Groups[2].Value;

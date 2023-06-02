@@ -14,28 +14,18 @@ namespace TodoTrack.Cli
     //TODO: should be configured via interface
     public class TodoHolder
     {
-        private readonly KeyedList<IndexedTodoItem> _todoItems;
         private string _focusId = "";
-        private readonly IMapper _mapper;
         private readonly Dictionary<Type, IRepo> _repos;
         private readonly Dictionary<Type, IList<IEntity>> _set;
 
-        public TodoHolder(IRepo<TodoItem> todoRepo, IRepo<Project> projectRepo, IMapper mapper)
+        public TodoHolder(IRepo<TodoItem> todoRepo, IRepo<Project> projectRepo)
         {
             _set = new();
-            _repos = new();
-            _todoItems = new();
-            _repos[GetEntityType(todoRepo)] = todoRepo;
-            _repos[GetEntityType(projectRepo)] = projectRepo;
-            _mapper = mapper;
-            int i = 0;
-            _todoItems.AddRange(GetAsync<TodoItem>().Result
-                .OrderByDescending(w => w.ScheduledDueTimestamp).ToList().Select(w =>
-                {
-                    var result = mapper.Map<IndexedTodoItem>(w);
-                    result.Index = i++;
-                    return result;
-                }));
+            _repos = new()
+            {
+                [GetEntityType(todoRepo)] = todoRepo,
+                [GetEntityType(projectRepo)] = projectRepo
+            };
         }
 
         private static Type GetEntityType(IRepo obj)
@@ -52,36 +42,11 @@ namespace TodoTrack.Cli
             return (IRepo<T>)_repos[typeof(T)];
         }
 
-        public IList<T>? Set<T>()
+        public IList<T> Set<T>()
             where T : class, IEntity
         {
-            if(!_set.ContainsKey(typeof(T))) return null;
+            if(!_set.ContainsKey(typeof(T))) throw new ArgumentException();
             return _set[typeof(T)].OfType<T>().ToList();
-        }
-
-        internal async Task<IList<IndexedTodoItem>> GetTodoItemsAsync()
-        {
-            await SetFocusAsync(_focusId);
-            return _todoItems;
-        }
-
-        internal async Task<IList<Project>> GetProjectAsync()
-        {
-            return (await Repo<Project>().GetAsync()).ToList();
-        }
-
-        internal async Task<IList<Tag>> GetTagAsync()
-        {
-            return (await Repo<Tag>().GetAsync()).ToList();
-        }
-
-        internal async Task<IndexedTodoItem> CreateTodoItemAsync(TodoItem item)
-        {
-            var todo = await Repo<TodoItem>().CreateAsync(item);
-            var iTodo = _mapper.Map<IndexedTodoItem>(todo);
-            iTodo.Index = _todoItems.Count;
-            _todoItems.Add(iTodo);
-            return iTodo;
         }
 
         internal async Task<Project?> GetProjectFromNameAsync(string value)
@@ -91,7 +56,7 @@ namespace TodoTrack.Cli
 
         internal async Task SetFocusAsync(string todoId)
         {
-            foreach (var item in _todoItems)
+            foreach (var item in Set<TodoItem>())
             {
                 if (todoId == item.Id)
                 {
@@ -100,7 +65,7 @@ namespace TodoTrack.Cli
                     if (_focusId != item.Id)
                     {
                         item.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
-                        await UpdateTodoItemAsync(item);
+                        await UpdateAsync(item);
                     }
                     _focusId = item.Id;
                 }
@@ -109,21 +74,21 @@ namespace TodoTrack.Cli
             }
         }
 
-        internal async Task UnsetFocusAsync(string todoId)
+        internal async Task UnsetFocusAsync(string id)
         {
-            var item = _todoItems[todoId];
+            var item = Set<TodoItem>().SingleOrDefault(w => id == w.Id);
             if (item == null) return;
             item.IsFocus = false;
             item.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
             _focusId = "";
-            await UpdateTodoItemAsync(item);
+            await UpdateAsync(item);
         }
 
         internal async Task AddTodayItemsAsync(IEnumerable<string> addIds)
         {
             foreach (var item in addIds)
             {
-                var target = _todoItems.SingleOrDefault(w => w.Id == item);
+                var target = Set<TodoItem>().SingleOrDefault(w => w.Id == item);
                 if (target == null) return;
                 target.IsToday = true;
             }
@@ -132,9 +97,9 @@ namespace TodoTrack.Cli
 
         internal async Task RemoveTodayTodoItemAsync(IEnumerable<string> deleteIds)
         {
-            foreach (var item in deleteIds)
+            foreach (var id in deleteIds)
             {
-                var target = (_todoItems.SingleOrDefault(w => w.Id == item));
+                var target = Set<TodoItem>().SingleOrDefault(w => id == w.Id);
                 if (target == null) return;
                 target.IsToday = false;
                 await UnsetFocusAsync(target.Id);
@@ -142,17 +107,11 @@ namespace TodoTrack.Cli
             await Task.CompletedTask;
         }
 
-
-        private async Task UpdateTodoItemAsync(IndexedTodoItem item)
-        {
-            await Repo<TodoItem>().UpdateAsync(item.Id, item);
-        }
-
         internal async Task StartTodoItemAsync(IEnumerable<string> ids)
         {
             foreach (var id in ids)
             {
-                var target = _todoItems[id];
+                var target = Set<TodoItem>().SingleOrDefault(w => id == w.Id);
                 var currentDateStamp = TimestampHelper.CurrentDateStamp;
 
                 if (target != null)
@@ -171,7 +130,7 @@ namespace TodoTrack.Cli
         {
             foreach (var id in ids)
             {
-                var target = _todoItems[id];
+                var target = Set<TodoItem>().SingleOrDefault(w => id == w.Id);
                 if (target != null)
                 {
                     var currentDateStamp = TimestampHelper.CurrentDateStamp;
@@ -194,7 +153,7 @@ namespace TodoTrack.Cli
         {
             foreach (var id in ids)
             {
-                var target = _todoItems[id];
+                var target = Set<TodoItem>().SingleOrDefault(w=> w.Id == id);
                 if (target != null)
                 {
                     var currentDateStamp = TimestampHelper.CurrentDateStamp;
@@ -232,7 +191,6 @@ namespace TodoTrack.Cli
             foreach (var item in deleteIds)
             {
                 await Repo<TEntity>().DeleteAsync(item);
-                if (typeof(TEntity) == typeof(TodoItem)) _todoItems.Remove(_todoItems.Single(w => w.Id == item));
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Spectre.Console.Cli;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
+using TodoTrack.Contracts;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TodoTrack.Cli.Commands
@@ -22,12 +23,12 @@ namespace TodoTrack.Cli.Commands
             switch (settings?.RangeString?.ToLower())
             {
                 case "all":
-                    TableOutputHelper.BuildTable(await _todoHolder.GetTodoItemsAsync(), "Todo All");
+                    TableOutputHelper.BuildTable((await _todoHolder.GetAsync<TodoItem>()).ToList(), "Todo All");
                     break;
                 case "today":
                 case "now":
                 default:
-                    TableOutputHelper.BuildTable((await _todoHolder.GetTodoItemsAsync()).Where(w => w.IsToday).ToList(), "Todo Today");
+                    TableOutputHelper.BuildTable((await _todoHolder.GetAsync<TodoItem>()).Where(w => w.IsToday).ToList(), "Todo Today");
                     break;
             }
             return 0;

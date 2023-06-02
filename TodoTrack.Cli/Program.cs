@@ -20,10 +20,6 @@ namespace TodoTrack.Cli
     Host.CreateDefaultBuilder(args)
         .ConfigureServices((hostContext, services) =>
         {
-            services.AddAutoMapper(options =>
-            {
-                options.CreateMap<TodoItem, IndexedTodoItem>();
-            });
             services.AddTransient<IRepo<TodoItem>, TodoSourceRepo>();
             services.AddTransient<IRepo<Tag>, TagSourceRepo>();
             services.AddTransient<IRepo<Project>, ProjectSourceRepo>();

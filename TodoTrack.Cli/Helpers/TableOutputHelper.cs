@@ -5,7 +5,7 @@ namespace TodoTrack.Cli
 {
     internal class TableOutputHelper
     {
-        public static void BuildTable(IList<IndexedTodoItem> items, string title = "")
+        public static void BuildTable(IList<TodoItem> items, string title = "")
         {
             var table = new Table();
             if (!string.IsNullOrWhiteSpace(title)) table.Title = new TableTitle(title.Trim());
@@ -23,7 +23,7 @@ namespace TodoTrack.Cli
                 List<string> sb = new()
                     {
                         items[i].IsFocus ? "[red]>[/]" : "",
-                        $"[green]{items[i].Index}[/]",
+                        $"[green]{i}[/]",
                         $"[{color}]{items[i].Name}[/]",
                         $"[{color}]{items[i].Status}[/]",
                         $"[{color}]{items[i].Project?.Name ?? "null"}[/]"

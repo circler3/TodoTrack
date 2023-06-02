@@ -25,7 +25,7 @@ namespace TodoTrack.Cli.Commands
         }
         public override async Task<int> ExecuteAsync(CommandContext context, RangeSettings settings)
         {
-            string input = settings.RangeString;
+            string input = settings.RangeString ?? settings.Category;
             string pattern = @"(^|[$\-#%*/&])(\S+)";
 
             try
@@ -35,7 +35,7 @@ namespace TodoTrack.Cli.Commands
 
 
                 bool instantFlag = false;
-                foreach (Match m in matches)
+                foreach (Match m in matches.Cast<Match>())
                 {
                     string symbol = m.Groups[1].Value;
                     string value = m.Groups[2].Value;
@@ -82,7 +82,7 @@ namespace TodoTrack.Cli.Commands
                     item.ScheduledBeginTimestamp = TimestampHelper.CurrentDateStamp;
                     item.Status = TodoStatus.InProgress;
                 }
-                var todo = await _todoHolder.CreateTodoItemAsync(item);
+                var todo = await _todoHolder.CreateAsync(item);
                 if (instantFlag) await _todoHolder.SetFocusAsync(todo.Id);
             }
             catch (Exception e)
@@ -90,7 +90,7 @@ namespace TodoTrack.Cli.Commands
                 AnsiConsole.WriteException(e);
                 throw;
             }
-            TableOutputHelper.BuildTable((await _todoHolder.GetTodoItemsAsync()));
+            TableOutputHelper.BuildTable(_todoHolder.Set<TodoItem>());
             return 0;
         }
     }
