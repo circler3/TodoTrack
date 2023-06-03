@@ -25,7 +25,7 @@ namespace TodoTrack.Cli.Commands
         }
         public override async Task<int> ExecuteAsync(CommandContext context, RangeSettings settings)
         {
-            string input = settings.RangeString;
+            string input = settings.RangeString ?? "";
             string pattern = @"(^|[$\-#%*/&])(\S+)";
 
             try

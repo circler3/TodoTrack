@@ -12,7 +12,7 @@ namespace TodoTrack.Cli
 {
     internal class RangeHelper
     {
-        public static List<string> GetMatchedStringList(string command, IList<IEntity> indexedTodoItems)
+        public static List<string> GetMatchedStringList(string command, IEnumerable<IEntity> indexedTodoItems)
         {
             var todoIdToDelete = command.Split(' ');
             var strList = new List<string>();
@@ -32,8 +32,8 @@ namespace TodoTrack.Cli
                 {
                     if (int.TryParse(item, out var result))
                     {
-                        if (result >= indexedTodoItems.Count) continue;
-                        strList.Add(indexedTodoItems[result].Id);
+                        if (result >= indexedTodoItems.Count()) continue;
+                        strList.Add(indexedTodoItems.ToArray()[result].Id);
                     }
                 }
             }

@@ -37,13 +37,13 @@ namespace TodoTrack.TodoDataSource
             return await Task.FromResult(_dbContext.ProcessPeriods);
         }
 
-        public async Task<bool> UpdateAsync(string id, ProcessPeriod item)
+        public async Task<ProcessPeriod?> UpdateAsync(string id, ProcessPeriod item)
         {
             var target = _dbContext.ProcessPeriods.Find(id);
-            if (target == null) return false;
+            if (target == null) return null;
             _dbContext.Entry(target).CurrentValues.SetValues(item);
             await _dbContext.SaveChangesAsync();
-            return true;
+            return target;
         }
     }
 }

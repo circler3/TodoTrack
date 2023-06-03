@@ -9,18 +9,19 @@ namespace TodoTrack.Cli.Commands
     /// <summary>
     /// list all/today todo items from system.
     /// </summary>
-    public class ListCommand : AsyncCommand<RangeSettings>
+    public class ListTodoCommand : AsyncCommand<RangeSettings>
     {
         private readonly TodoHolder _todoHolder;
 
-        public ListCommand(TodoHolder todoHolder)
+        public ListTodoCommand(TodoHolder todoHolder)
         {
             _todoHolder = todoHolder;
         }
 
         public override async Task<int> ExecuteAsync(CommandContext context, RangeSettings settings)
         {
-            switch (settings?.RangeString?.ToLower())
+            string input = settings.RangeString ?? settings.Category;
+            switch (input.ToLower())
             {
                 case "all":
                     TableOutputHelper.BuildTodoTable(_todoHolder.Set<TodoItem>(), "Todo All");

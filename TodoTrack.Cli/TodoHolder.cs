@@ -14,29 +14,24 @@ namespace TodoTrack.Cli
     //TODO: should be configured via interface
     public class TodoHolder
     {
-        private string _focusId = "";
-        private readonly Dictionary<Type, IRepo> _repos;
-        private readonly Dictionary<Type, IList<IEntity>> _set;
+        private readonly Dictionary<Type, object> _repos;
+        private readonly Dictionary<Type, IEnumerable<IEntity>> _set;
 
         public TodoHolder(IRepo<TodoItem> todoRepo, IRepo<Project> projectRepo)
         {
-            _set = new();
+            _set = new()
+            {
+                [GetEntityType(todoRepo)] = todoRepo.GetAsync().Result ?? throw new NullReferenceException(),
+                [GetEntityType(projectRepo)] = projectRepo.GetAsync().Result ?? throw new NullReferenceException()
+            };
             _repos = new()
             {
-                [GetEntityType(todoRepo)] = todoRepo,
-                [GetEntityType(projectRepo)] = projectRepo
+                [GetEntityType(todoRepo)] = todoRepo ?? throw new NullReferenceException(),
+                [GetEntityType(projectRepo)] = projectRepo ?? throw new NullReferenceException()
             };
         }
 
-        // private async Task SyncFromRemote()
-        // {
-        //     foreach(var repo in _repos)
-        //     {
-        //         _set[repo.Key] = (typeof(IRepo<repo.Value>))repo.Value;
-        //     }
-        // }
-
-        private static Type GetEntityType(IRepo obj)
+        private static Type GetEntityType(object obj)
         {
             var repoInterface = obj.GetType().GetInterfaces().FirstOrDefault(w => w.IsGenericType
             && w.GetGenericTypeDefinition() == typeof(IRepo<>));
@@ -50,53 +45,23 @@ namespace TodoTrack.Cli
             return (IRepo<T>)_repos[typeof(T)];
         }
 
-        public IList<IEntity> EntitySet<T>()
+        public IEnumerable<IEntity> EntitySet<T>()
             where T : class, IEntity
         {
-            if(!_set.ContainsKey(typeof(T))) throw new ArgumentException();
+            if (!_set.ContainsKey(typeof(T))) throw new ArgumentException();
             return _set[typeof(T)];
         }
 
         public IList<T> Set<T>()
             where T : class, IEntity
         {
-            if(!_set.ContainsKey(typeof(T))) throw new ArgumentException();
+            if (!_set.ContainsKey(typeof(T))) throw new ArgumentException();
             return _set[typeof(T)].OfType<T>().ToList();
         }
 
         internal async Task<Project?> GetProjectFromNameAsync(string value)
         {
             return (await Repo<Project>().GetAsync()).SingleOrDefault(w => w.Id == value);
-        }
-
-        internal async Task SetFocusAsync(string todoId)
-        {
-            foreach (var item in Set<TodoItem>())
-            {
-                if (todoId == item.Id)
-                {
-                    item.IsFocus = true;
-                    item.IsToday = true;
-                    if (_focusId != item.Id)
-                    {
-                        item.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
-                        await UpdateAsync(item);
-                    }
-                    _focusId = item.Id;
-                }
-                else
-                    item.IsFocus = false;
-            }
-        }
-
-        internal async Task UnsetFocusAsync(string id)
-        {
-            var item = Set<TodoItem>().SingleOrDefault(w => id == w.Id);
-            if (item == null) return;
-            item.IsFocus = false;
-            item.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
-            _focusId = "";
-            await UpdateAsync(item);
         }
 
         internal async Task AddTodayItemsAsync(IEnumerable<string> addIds)
@@ -109,6 +74,7 @@ namespace TodoTrack.Cli
                 target.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
                 await UpdateAsync(target);
             }
+            await GetAsync<TodoItem>();
         }
 
         internal async Task RemoveTodayTodoItemAsync(IEnumerable<string> deleteIds)
@@ -118,9 +84,10 @@ namespace TodoTrack.Cli
                 var target = Set<TodoItem>().SingleOrDefault(w => id == w.Id);
                 if (target == null) return;
                 target.IsToday = false;
-                await UnsetFocusAsync(target.Id);
+                target.IsFocus = false;
+                await UpdateAsync(target);
             }
-            await Task.CompletedTask;
+            await GetAsync<TodoItem>();
         }
 
         internal async Task StartTodoItemAsync(IEnumerable<string> ids)
@@ -134,12 +101,14 @@ namespace TodoTrack.Cli
                 {
                     target.LatestWorkTimestamp = currentDateStamp;
                     target.Status = TodoStatus.InProgress;
+                    target.IsToday = true;
+                    target.IsFocus = true;
                     target.TodoPeriods.Add(new WorkPeriod { StartTimestamp = currentDateStamp });
-                    await SetFocusAsync(target.Id);
                 }
                 else
                     Console.WriteLine("Invalid index. Cannot start Todo item");
             }
+            await GetAsync<TodoItem>();
         }
 
         internal async Task FinishTodoItemAsync(IEnumerable<string> ids)
@@ -151,54 +120,60 @@ namespace TodoTrack.Cli
                 {
                     var currentDateStamp = TimestampHelper.CurrentDateStamp;
                     target.LatestWorkTimestamp = currentDateStamp;
-                    if (target.TodoPeriods.Count != 0) 
+                    if (target.TodoPeriods.Count != 0)
                         if (target.TodoPeriods[^1].Started) target.TodoPeriods[^1].EndTimestamp = currentDateStamp;
                     target.FinishedTimestamp = currentDateStamp;
                     //todo: recheck
                     if (currentDateStamp <= target.ScheduledDueTimestamp) target.Status = TodoStatus.FinishedOnTime;
                     else target.Status = TodoStatus.FinishedDelayed;
-                    await UnsetFocusAsync(target.Id);
+                    target.IsToday = false;
+                    target.IsFocus = false;
                     await RemoveTodayTodoItemAsync(new[] { target.Id });
                 }
                 else
                     Console.WriteLine("Invalid index. Cannot start Todo item");
             }
+            await GetAsync<TodoItem>();
         }
 
         internal async Task StopTodoItemAsync(IEnumerable<string> ids)
         {
             foreach (var id in ids)
             {
-                var target = Set<TodoItem>().SingleOrDefault(w=> w.Id == id);
+                var target = Set<TodoItem>().SingleOrDefault(w => w.Id == id);
                 if (target != null)
                 {
                     var currentDateStamp = TimestampHelper.CurrentDateStamp;
                     target.LatestWorkTimestamp = currentDateStamp;
                     if (target.TodoPeriods.Count == 0) return;
                     if (target.TodoPeriods[^1].Started) target.TodoPeriods[^1].EndTimestamp = currentDateStamp;
-                    await UnsetFocusAsync(target.Id);
+                    target.IsFocus = false;
                 }
                 else
                     Console.WriteLine("Invalid index. Cannot start Todo item");
             }
+            await GetAsync<TodoItem>();
         }
 
         internal async Task<TEntity> CreateAsync<TEntity>(TEntity item)
             where TEntity : class, IEntity
         {
-           return await Repo<TEntity>().CreateAsync(item);
+            var result = await Repo<TEntity>().CreateAsync(item);
+            await GetAsync<TEntity>();
+            return result;
         }
 
         internal async Task<IQueryable<TEntity>> GetAsync<TEntity>()
     where TEntity : class, IEntity
         {
-            _set[typeof(TEntity)] = (await Repo<TEntity>().GetAsync()).OfType<IEntity>().ToList();
-            return await Repo<TEntity>().GetAsync();
+            var result = await Repo<TEntity>().GetAsync();
+            _set[typeof(TEntity)] = result;
+            return result;
         }
-        internal async Task UpdateAsync<TEntity>(TEntity entity)
+        internal async Task<TEntity?> UpdateAsync<TEntity>(TEntity entity)
     where TEntity : class, IEntity
         {
-            await Repo<TEntity>().UpdateAsync(entity.Id, entity);
+            return await Repo<TEntity>().UpdateAsync(entity.Id, entity);
         }
 
         internal async Task DeleteAsync<TEntity>(IEnumerable<string> deleteIds)

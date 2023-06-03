@@ -24,7 +24,7 @@ namespace TodoTrack.Cli.Commands
         {
             try
             {
-                List<string> strList = RangeHelper.GetMatchedStringList(settings.RangeString, _todoHolder.EntitySet<T>());
+                List<string> strList = RangeHelper.GetMatchedStringList(settings.RangeString ?? "", _todoHolder.EntitySet<T>());
                 await _todoHolder.DeleteAsync<T>(strList);
             }
             catch (Exception e)

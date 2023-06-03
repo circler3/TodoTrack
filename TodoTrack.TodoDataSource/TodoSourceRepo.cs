@@ -11,7 +11,7 @@ namespace TodoTrack.TodoDataSource
         public TodoSourceRepo()
         {
             _dbContext = new SQLiteDbContext();
-            //_dbContext.Database.EnsureDeleted();
+            _dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
         }
         //TODO: USE DTO TO MAKE ID IMUTTABLE
@@ -44,13 +44,13 @@ namespace TodoTrack.TodoDataSource
             return true;
         }
 
-        public async Task<bool> UpdateAsync(string id, TodoItem item)
+        public async Task<TodoItem?> UpdateAsync(string id, TodoItem item)
         {
             var target = _dbContext.TodoItems.Find(id);
-            if (target == null) return false;
+            if (target == null) return null;
             _dbContext.Entry(target).CurrentValues.SetValues(item);
             await _dbContext.SaveChangesAsync();
-            return true;
+            return target;
         }
     }
 }

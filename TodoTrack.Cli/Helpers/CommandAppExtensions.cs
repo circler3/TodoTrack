@@ -33,12 +33,12 @@ namespace TodoTrack.Cli.Helpers
                     });
                     config.AddBranch<CategorySettings>("list", list =>
                     {
-                        list.SetDefaultCommand<ListCommand>();
-                        list.AddCommand<ListCommand>("todo");
+                        list.SetDefaultCommand<ListTodoCommand>();
+                        list.AddCommand<ListTodoCommand>("todo");
                         //todo: build
-                        list.AddCommand<ListCommand>("pro");
+                        list.AddCommand<ListTodoCommand>("pro");
                         //todo: build
-                        list.AddCommand<ListCommand>("tag");
+                        list.AddCommand<ListTodoCommand>("tag");
                     });
 
                     config.AddCommand<FinishTodoCommand>("finish").WithAlias("f");

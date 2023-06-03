@@ -44,13 +44,13 @@ namespace TodoTrack.TodoDataSource
             return true;
         }
 
-        public async Task<bool> UpdateAsync(string id, Tag item)
+        public async Task<Tag?> UpdateAsync(string id, Tag item)
         {
             var target = _dbContext.Tags.Find(id);
-            if (target == null) return false;
+            if (target == null) return null;
             _dbContext.Entry(target).CurrentValues.SetValues(item);
             await _dbContext.SaveChangesAsync();
-            return true;
+            return target;
         }
     }
 }
