@@ -81,16 +81,16 @@ namespace TodoTrack.Cli.Commands
                 {
                     item.ScheduledBeginTimestamp = TimestampHelper.CurrentDateStamp;
                     item.Status = TodoStatus.InProgress;
+                    item.IsFocus = true;
                 }
                 var todo = await _todoHolder.CreateAsync(item);
-                if (instantFlag) await _todoHolder.SetFocusAsync(todo.Id);
             }
             catch (Exception e)
             {
                 AnsiConsole.WriteException(e);
                 throw;
             }
-            TableOutputHelper.BuildTable(_todoHolder.Set<TodoItem>());
+            TableOutputHelper.BuildTodoTable(_todoHolder.Set<TodoItem>());
             return 0;
         }
     }

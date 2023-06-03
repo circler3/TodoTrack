@@ -28,6 +28,14 @@ namespace TodoTrack.Cli
             };
         }
 
+        // private async Task SyncFromRemote()
+        // {
+        //     foreach(var repo in _repos)
+        //     {
+        //         _set[repo.Key] = (typeof(IRepo<repo.Value>))repo.Value;
+        //     }
+        // }
+
         private static Type GetEntityType(IRepo obj)
         {
             var repoInterface = obj.GetType().GetInterfaces().FirstOrDefault(w => w.IsGenericType
@@ -40,6 +48,13 @@ namespace TodoTrack.Cli
             where T : class, IEntity
         {
             return (IRepo<T>)_repos[typeof(T)];
+        }
+
+        public IList<IEntity> EntitySet<T>()
+            where T : class, IEntity
+        {
+            if(!_set.ContainsKey(typeof(T))) throw new ArgumentException();
+            return _set[typeof(T)];
         }
 
         public IList<T> Set<T>()
@@ -91,8 +106,9 @@ namespace TodoTrack.Cli
                 var target = Set<TodoItem>().SingleOrDefault(w => w.Id == item);
                 if (target == null) return;
                 target.IsToday = true;
+                target.LatestWorkTimestamp = TimestampHelper.CurrentDateStamp;
+                await UpdateAsync(target);
             }
-            await Task.CompletedTask;
         }
 
         internal async Task RemoveTodayTodoItemAsync(IEnumerable<string> deleteIds)

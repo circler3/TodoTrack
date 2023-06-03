@@ -5,7 +5,7 @@ namespace TodoTrack.Cli
 {
     internal class TableOutputHelper
     {
-        public static void BuildTable(IList<TodoItem> items, string title = "")
+        public static void BuildTodoTable(IList<TodoItem> items, string title = "")
         {
             var table = new Table();
             if (!string.IsNullOrWhiteSpace(title)) table.Title = new TableTitle(title.Trim());
