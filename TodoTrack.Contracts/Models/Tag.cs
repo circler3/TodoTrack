@@ -8,7 +8,7 @@ namespace TodoTrack.Contracts
         [Key]
         public string Id { get; set; } = default!;
         public string Name { get; set; } = default!;
-        [NotMapped]
+        public virtual ICollection<TodoItem> TodoItems { get; set; } = new List<TodoItem>();
         public virtual ICollection<string> MatchKeys { get; set; } = new List<string>();
     }
 }

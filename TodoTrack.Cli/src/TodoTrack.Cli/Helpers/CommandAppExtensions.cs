@@ -19,7 +19,7 @@ namespace TodoTrack.Cli.Helpers
                     {
                         del.SetDefaultCommand<DelCommand<TodoItem>>();
                         del.AddCommand<DelCommand<TodoItem>>("todo");
-                        del.AddCommand<DelCommand<Project>>("pro");
+                        del.AddCommand<DelCommand<Project>>("project").WithAlias("pro");
                         del.AddCommand<DelCommand<Tag>>("tag");
                     });
                     config.AddBranch<CategorySettings>("new", add =>
@@ -27,7 +27,7 @@ namespace TodoTrack.Cli.Helpers
                         add.SetDefaultCommand<NewTodoCommand>();
                         add.AddCommand<NewTodoCommand>("todo");
                         //todo: build
-                        add.AddCommand<NewTodoCommand>("pro");
+                        add.AddCommand<NewProjectCommand>("project").WithAlias("pro");
                         //todo: build
                         add.AddCommand<NewTodoCommand>("tag");
                     });
@@ -36,7 +36,7 @@ namespace TodoTrack.Cli.Helpers
                         list.SetDefaultCommand<ListTodoCommand>();
                         list.AddCommand<ListTodoCommand>("todo");
                         //todo: build
-                        list.AddCommand<ListTodoCommand>("pro");
+                        list.AddCommand<ListTodoCommand>("project").WithAlias("pro");
                         //todo: build
                         list.AddCommand<ListTodoCommand>("tag");
                     });

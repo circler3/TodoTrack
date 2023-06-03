@@ -15,19 +15,14 @@ namespace TodoTrack.Contracts
         public virtual string? Description { get; set; }
         public virtual string? Comment { get; set; }
         public virtual Project? Project { get; set; }
-        [NotMapped]
-        public virtual ICollection<Category>? Categories { get; set; }
-        [NotMapped]
         public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
-        [NotMapped]
-        public virtual ICollection<TodoItem>? SubTodoItems { get; set; }
+        public virtual TodoItem? Parent { get; set; }
         public virtual long? CreatedTimestamp { get; set; }
         public virtual long? FinishedTimestamp { get; set; }
         public virtual long? ScheduledBeginTimestamp { get; set; }
         public virtual long? ScheduledDueTimestamp { get; set; }
         public virtual long? LatestWorkTimestamp { get; set; }
-        [NotMapped]
-        public virtual IList<long>? NotifyTimestamp { get; set; }
+        public virtual IList<long> NotifyTimestamps { get; set; } = default!;
         public virtual long? EstimatedDuration { get; set; }
         public virtual string? RepeatCron { get; set; }
         public virtual bool Repeatable { get; set; } = false;
@@ -35,11 +30,7 @@ namespace TodoTrack.Contracts
         public virtual EisenhowerMatrix Priority { get; set; }
         public virtual bool IsFocus { get; set; } = false;
         public virtual bool IsToday { get; set; } = false;
-        [NotMapped]
         public virtual IList<WorkPeriod>? ProcessPeriods { get; set; } = new List<WorkPeriod>();
-        [NotMapped]
-        public virtual IList<WorkPeriod> TodoPeriods { get; set; } = new List<WorkPeriod>();
-        [NotMapped]
-        public virtual ICollection<Attachment>? Attachments { get; set; }
+        public virtual IList<WorkPeriod>? TodoPeriods { get; set; } = new List<WorkPeriod>();
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Spectre.Console;
+﻿using Spectre.Console;
 using TodoTrack.Contracts;
 
 namespace TodoTrack.Cli
@@ -58,6 +57,20 @@ namespace TodoTrack.Cli
             }
 
             AnsiConsole.Write(table);
+        }
+
+        internal static void BuildTable<T>(IList<T> ts, string v)
+            where T: class, IEntity
+        {
+            switch(typeof(T))
+            {
+                case Type t when t == typeof(TodoItem):
+                BuildTodoTable((IList<TodoItem>)ts, v);
+                break;
+                case Type t when t == typeof(Project):
+                BuildProjectTable((IList<Project>)ts, v);
+                break;
+            };
         }
     }
 }

@@ -26,10 +26,29 @@ namespace TodoTrack.TodoDataSource
                 v => string.Join(',', v),
                 v => v.Split(',', StringSplitOptions.None).ToList().Select(w => long.Parse(w)).ToList()
                 );
+            modelBuilder.Entity<TodoItem>().Property(x => x.NotifyTimestamps).HasConversion(
+                v => string.Join(',', v),
+                v => v.Split(',', StringSplitOptions.None).ToList().Select(w => long.Parse(w)).ToList()
+                );
+            modelBuilder.Entity<Tag>().Property(x=>x.MatchKeys).HasConversion(
+                v => string.Join(',', v),
+                v => v.Split(',', StringSplitOptions.None).ToList()
+            );
+            modelBuilder.Entity<TodoItem>().Property(x=>x.TodoPeriods).HasConversion(
+                v => string.Join(',', v.Select(w=> WorkPeriodConverter.ConvertToString(w))),
+                v => v.Split(',', StringSplitOptions.None)
+                .Select(w=> WorkPeriodConverter.Parse(w)).ToList()
+            );
+            modelBuilder.Entity<TodoItem>().Property(x=>x.ProcessPeriods).HasConversion(
+                v => string.Join(',', v.Select(w=> WorkPeriodConverter.ConvertToString(w))),
+                v => v.Split(',', StringSplitOptions.None)
+                .Select(w=> WorkPeriodConverter.Parse(w)).ToList()
+            );
         }
         public DbSet<ProcessPeriod> ProcessPeriods { get; set; } = default!;
         public DbSet<TodoItem> TodoItems { get; set; } = default!;
         public DbSet<Project> Projects { get; set; } = default!;
         public DbSet<Tag> Tags { get; set; } = default!;
+        public DbSet<Attachment> Attachments { get; set; } = default!;
     }
 }

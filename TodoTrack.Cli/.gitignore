@@ -252,4 +252,4 @@ paket-files/
 *.sln.iml
 
 # Cli
-src/TodoTrack.Cli.ConsoleApp/Logs/logs.txt
+src/TodoTrack.Cli/Logs/logs.txt
