@@ -11,7 +11,7 @@ using TodoTrack.Contracts;
 
 namespace TodoTrack.TodoDataSource
 {
-    public class SQLiteDbContext : DbContext
+    public class TodoDbContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -7,10 +7,10 @@ namespace TodoTrack.TodoDataSource
     /// </summary>
     public class ProjectSourceRepo : IRepo<Project>
     {
-        private readonly SQLiteDbContext _dbContext;
+        private readonly TodoDbContext _dbContext;
         public ProjectSourceRepo()
         {
-            _dbContext = new SQLiteDbContext();
+            _dbContext = new();
             //_dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
         }
@@ -35,13 +35,6 @@ namespace TodoTrack.TodoDataSource
         public async Task<IQueryable<Project>> GetAsync()
         {
             return await Task.FromResult(_dbContext.Projects);
-        }
-
-        public async Task<bool> PostNewEntriesAsync(IEnumerable<ProcessPeriod> workFromProcesses)
-        {
-            _dbContext.ProcessPeriods.AddRange(workFromProcesses);
-            await _dbContext.SaveChangesAsync();
-            return true;
         }
 
         public async Task<Project?> UpdateAsync(string id, Project item)

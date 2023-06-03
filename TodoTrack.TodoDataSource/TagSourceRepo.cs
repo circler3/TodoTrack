@@ -7,10 +7,10 @@ namespace TodoTrack.TodoDataSource
     /// </summary>
     public class TagSourceRepo : IRepo<Tag>
     {
-        private readonly SQLiteDbContext _dbContext;
+        private readonly TodoDbContext _dbContext;
         public TagSourceRepo()
         {
-            _dbContext = new SQLiteDbContext();
+            _dbContext = new TodoDbContext();
             //_dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
         }
@@ -35,13 +35,6 @@ namespace TodoTrack.TodoDataSource
         public async Task<IQueryable<Tag>> GetAsync()
         {
             return await Task.FromResult(_dbContext.Tags);
-        }
-
-        public async Task<bool> PostNewEntriesAsync(IEnumerable<ProcessPeriod> workFromProcesses)
-        {
-            _dbContext.ProcessPeriods.AddRange(workFromProcesses);
-            await _dbContext.SaveChangesAsync();
-            return true;
         }
 
         public async Task<Tag?> UpdateAsync(string id, Tag item)

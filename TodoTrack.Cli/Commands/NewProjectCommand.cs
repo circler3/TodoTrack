@@ -79,7 +79,7 @@ namespace TodoTrack.Cli.Commands
                 AnsiConsole.WriteException(e);
                 throw;
             }
-            TableOutputHelper.BuildTable((await _todoHolder.GetAsync<Project>()).ToList(), "Project List");
+            TableOutputHelper.BuildProjectTable((await _todoHolder.GetAsync<Project>()).ToList(), "Project List");
             return 0;
         }
     }

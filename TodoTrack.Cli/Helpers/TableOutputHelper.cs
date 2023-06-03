@@ -35,7 +35,7 @@ namespace TodoTrack.Cli
         }
 
 
-        public static void BuildTable(IList<Project> items, string title = "")
+        public static void BuildProjectTable(IList<Project> items, string title = "")
         {
             var table = new Table();
             if (!string.IsNullOrWhiteSpace(title)) table.Title = new TableTitle(title.Trim());

@@ -7,10 +7,10 @@ namespace TodoTrack.TodoDataSource
     /// </summary>
     public class TodoSourceRepo : IRepo<TodoItem>
     {
-        private readonly SQLiteDbContext _dbContext;
+        private readonly TodoDbContext _dbContext;
         public TodoSourceRepo()
         {
-            _dbContext = new SQLiteDbContext();
+            _dbContext = new TodoDbContext();
             _dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
         }

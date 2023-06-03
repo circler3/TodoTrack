@@ -7,10 +7,10 @@ namespace TodoTrack.TodoDataSource
     /// </summary>
     public class ProcessPeriodSourceRepo : IRepo<ProcessPeriod>
     {
-        private readonly SQLiteDbContext _dbContext;
+        private readonly TodoDbContext _dbContext;
         public ProcessPeriodSourceRepo()
         {
-            _dbContext = new SQLiteDbContext();
+            _dbContext = new TodoDbContext();
             //_dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
         }
