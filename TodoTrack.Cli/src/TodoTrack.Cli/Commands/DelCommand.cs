@@ -10,7 +10,7 @@ namespace TodoTrack.Cli.Commands
     /// <summary>
     /// delete a todo item from system.
     /// </summary>
-    public class DelCommand<T> : AsyncCommand<RangeSettings>
+    public class DelCommand<T> : AsyncCommand<DelSettings>
         where T : class, IEntity
     {
         private readonly TodoHolder _todoHolder;
@@ -20,11 +20,11 @@ namespace TodoTrack.Cli.Commands
             _todoHolder = todoHolder;
         }
 
-        public override async Task<int> ExecuteAsync(CommandContext context, RangeSettings settings)
+        public override async Task<int> ExecuteAsync(CommandContext context, DelSettings settings)
         {
             try
             {
-                List<string> strList = RangeHelper.GetMatchedStringList(settings.RangeString ?? settings.Category, _todoHolder.EntitySet<T>());
+                List<string> strList = RangeHelper.GetMatchedStringList(settings.ListString, _todoHolder.EntitySet<T>());
                 await _todoHolder.DeleteAsync<T>(strList);
             }
             catch (Exception e)

@@ -15,7 +15,7 @@ namespace TodoTrack.Cli.Commands
     /// <summary>
     /// add a new todo item into system.
     /// </summary>
-    public class NewTodoCommand : AsyncCommand<RangeSettings>
+    public class NewTodoCommand : AsyncCommand<NewSettings>
     {
         private readonly TodoHolder _todoHolder;
 
@@ -23,61 +23,20 @@ namespace TodoTrack.Cli.Commands
         {
             _todoHolder = todoHolder;
         }
-        public override async Task<int> ExecuteAsync(CommandContext context, RangeSettings settings)
+        public override async Task<int> ExecuteAsync(CommandContext context, NewSettings settings)
         {
-            string input = settings.RangeString ?? settings.Category;
-            string pattern = @"(^|[$\-#%*/&])(\S+)";
+            //string[] input = settings.BuildString;
+            //string pattern = @"(^|[$\-#%*/&])(\S+)";
 
             try
             {
                 TodoItem item = new();
-                MatchCollection matches = Regex.Matches(input, pattern);
-
-
-                bool instantFlag = false;
-                foreach (Match m in matches.Cast<Match>())
-                {
-                    string symbol = m.Groups[1].Value;
-                    string value = m.Groups[2].Value;
-
-                    switch (symbol)
-                    {
-                        case "":
-                            //name
-                            item.Name = value;
-                            break;
-                        case "$":
-                            //project name
-                            item.Project = await _todoHolder.GetProjectFromNameAsync(value);
-                            break;
-                        case "#":
-                            //tag
-                            //TODO: Implement tags
-                            //item.Tags.Add(value);
-                            break;
-                        case "&":
-                            //match keys of tags
-
-                            break;
-                        case "/":
-                            //time
-                            item.EstimatedDuration = TimestampHelper.GetDurationFromString(value);
-                            break;
-                        case "-":
-                            //additional command
-                            if (value == "s") instantFlag = true;
-                            break;
-                        case "*":
-                            //undefined
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                if (string.IsNullOrWhiteSpace(item.Name)) return -1;
+                item.Name = settings.Name;
+                if (settings.Project != null) item.Project = await _todoHolder.GetProjectFromNameAsync(settings.Project);
+                if (settings.Tags != null) foreach (var n in settings.Tags) item.Tags.Add(_todoHolder.Set<Tag>().SingleOrDefault(w => w.Name == n) ?? throw new ArgumentOutOfRangeException("Argument out of range.",nameof(Tag)));
+                if (settings.Cost != null) item.EstimatedDuration = TimestampHelper.GetDurationFromString(settings.Cost);
                 item.CreatedTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
-                if (instantFlag)
+                if (settings.Start ?? false)
                 {
                     item.ScheduledBeginTimestamp = TimestampHelper.CurrentDateStamp;
                     item.Status = TodoStatus.InProgress;

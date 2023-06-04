@@ -15,14 +15,14 @@ namespace TodoTrack.Cli.Helpers
                 app.Configure(config =>
                 {
                     config.CaseSensitivity(CaseSensitivity.None);
-                    config.AddBranch<CategorySettings>("del", del =>
+                    config.AddBranch<IgnoreCategorySettings>("del", del =>
                     {
                         del.SetDefaultCommand<DelCommand<TodoItem>>();
                         del.AddCommand<DelCommand<TodoItem>>("todo");
                         del.AddCommand<DelCommand<Project>>("project").WithAlias("pro");
                         del.AddCommand<DelCommand<Tag>>("tag");
                     });
-                    config.AddBranch<CategorySettings>("new", add =>
+                    config.AddBranch<IgnoreCategorySettings>("new", add =>
                     {
                         add.SetDefaultCommand<NewTodoCommand>();
                         add.AddCommand<NewTodoCommand>("todo");
@@ -31,7 +31,7 @@ namespace TodoTrack.Cli.Helpers
                         //todo: build
                         add.AddCommand<NewTodoCommand>("tag");
                     });
-                    config.AddBranch<CategorySettings>("list", list =>
+                    config.AddBranch<IgnoreCategorySettings>("list", list =>
                     {
                         list.SetDefaultCommand<ListTodoCommand>();
                         list.AddCommand<ListTodoCommand>("todo");

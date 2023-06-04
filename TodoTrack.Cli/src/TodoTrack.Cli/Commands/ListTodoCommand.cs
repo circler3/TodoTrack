@@ -9,7 +9,7 @@ namespace TodoTrack.Cli.Commands
     /// <summary>
     /// list all/today todo items from system.
     /// </summary>
-    public class ListTodoCommand : AsyncCommand<RangeSettings>
+    public class ListTodoCommand : AsyncCommand<ListSettings>
     {
         private readonly TodoHolder _todoHolder;
 
@@ -18,9 +18,9 @@ namespace TodoTrack.Cli.Commands
             _todoHolder = todoHolder;
         }
 
-        public override async Task<int> ExecuteAsync(CommandContext context, RangeSettings settings)
+        public override async Task<int> ExecuteAsync(CommandContext context, ListSettings settings)
         {
-            string input = settings.RangeString ?? settings.Category;
+            string input = settings.ListString ?? "";
             switch (input.ToLower())
             {
                 case "all":

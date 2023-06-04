@@ -15,7 +15,7 @@ namespace TodoTrack.Cli.Commands
     /// <summary>
     /// add a new todo item into system.
     /// </summary>
-    public class NewProjectCommand : AsyncCommand<RangeSettings>
+    public class NewProjectCommand : AsyncCommand<NewSettings>
     {
         private readonly TodoHolder _todoHolder;
 
@@ -23,55 +23,15 @@ namespace TodoTrack.Cli.Commands
         {
             _todoHolder = todoHolder;
         }
-        public override async Task<int> ExecuteAsync(CommandContext context, RangeSettings settings)
+        public override async Task<int> ExecuteAsync(CommandContext context, NewSettings settings)
         {
-            string input = settings.RangeString ?? "";
-            string pattern = @"(^|[$\-#%*/&])(\S+)";
 
             try
             {
                 Project item = new();
-                MatchCollection matches = Regex.Matches(input, pattern);
-
-                foreach (Match m in matches.Cast<Match>())
-                {
-                    string symbol = m.Groups[1].Value;
-                    string value = m.Groups[2].Value;
-
-                    switch (symbol)
-                    {
-                        case "":
-                            //name
-                            item.Name = value;
-                            break;
-                        case "$":
-                            //parent project name
-                            item.Parent = await _todoHolder.GetProjectFromNameAsync(value);
-                            break;
-                        case "#":
-                            //tag
-                            //TODO: Implement tags
-                            //item.Tags.Add(value);
-                            break;
-                        case "&":
-                            //match keys of tags
-
-                            break;
-                        case "/":
-                            //time
-                            break;
-                        case "-":
-                            //additional command
-                            break;
-                        case "*":
-                            //undefined
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                if (string.IsNullOrWhiteSpace(item.Name)) return -1;
+                //name
+                item.Name = settings.Name;
+                if(settings.Project != null) item.Parent = await _todoHolder.GetProjectFromNameAsync(settings.Project);
                 await _todoHolder.CreateAsync(item);
             }
             catch (Exception e)

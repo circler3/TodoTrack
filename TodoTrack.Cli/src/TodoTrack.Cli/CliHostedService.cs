@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 using Spectre.Console.Cli;
+using System.Text;
 
 namespace TodoTrack.Cli;
 
@@ -28,7 +29,7 @@ public class CliHostedService : IHostedService
             if (string.IsNullOrWhiteSpace(cmd)) continue;
 
             // 解析命令行参数
-            await _commandApp.RunAsync(cmd.Split(' '));
+            await _commandApp.RunAsync(Parse(cmd));
         }
     }
 
@@ -36,4 +37,42 @@ public class CliHostedService : IHostedService
     {
         await _abpApplication.ShutdownAsync();
     }
+
+    public static string[] Parse(string commandLine)
+    {
+        // Split the command-line string into an array of strings
+        List<string> args = new List<string>();
+        bool insideQuotes = false;
+        StringBuilder currentArg = new StringBuilder();
+
+        for (int i = 0; i < commandLine.Length; i++)
+        {
+            char c = commandLine[i];
+
+            if (c == '"')
+            {
+                insideQuotes = !insideQuotes;
+                continue;
+            }
+
+            if (c == ' ' && !insideQuotes)
+            {
+                if (currentArg.Length > 0)
+                {
+                    args.Add(currentArg.ToString());
+                    currentArg.Clear();
+                }
+                continue;
+            }
+
+            currentArg.Append(c);
+        }
+
+        if (currentArg.Length > 0)
+        {
+            args.Add(currentArg.ToString());
+        }
+        return args.ToArray();
+    }
+
 }

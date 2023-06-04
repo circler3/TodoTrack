@@ -12,13 +12,13 @@ namespace TodoTrack.Cli
 {
     internal class RangeHelper
     {
-        public static List<string> GetMatchedStringList(string command, IEnumerable<IEntity> indexedTodoItems)
+        public static List<string> GetMatchedStringList(string[] command, IEnumerable<IEntity> indexedTodoItems)
         {
-            var todoIdToDelete = command.Split(' ');
+            var todoIdToDelete = command;
             var strList = new List<string>();
             if (todoIdToDelete.Length == 1 && !int.TryParse(todoIdToDelete[0], out var _))
             {
-                var range = GetRange(command);
+                var range = GetRange(command[0]);
                 if (range != null)
                     strList = indexedTodoItems.ToArray()[range.Value].Select(w => w.Id).ToList();
                 else

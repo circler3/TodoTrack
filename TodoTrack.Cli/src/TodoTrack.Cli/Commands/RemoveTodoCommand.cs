@@ -17,7 +17,7 @@ namespace TodoTrack.Cli.Commands
     /// <summary>
     /// remove a todo item from list of today.
     /// </summary>
-    public class RemoveTodoCommand : AsyncCommand<TodoSettings>
+    public class RemoveTodoCommand : AsyncCommand<TodoIndexSettings>
     {
         private readonly TodoHolder _todoHolder;
 
@@ -26,7 +26,7 @@ namespace TodoTrack.Cli.Commands
             _todoHolder = todoHolder;
         }
 
-        public override async Task<int> ExecuteAsync(CommandContext context, TodoSettings settings)
+        public override async Task<int> ExecuteAsync(CommandContext context, TodoIndexSettings settings)
         {
             try
             {

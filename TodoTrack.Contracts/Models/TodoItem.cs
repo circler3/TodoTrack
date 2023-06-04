@@ -10,7 +10,7 @@ namespace TodoTrack.Contracts
     public class TodoItem : IEntity
     {
         [Key]
-        public virtual string Id { get; set; } = default!;
+        public virtual string Id { get; set; } = "";
         public virtual string Name { get; set; } = string.Empty;
         public virtual string? Description { get; set; }
         public virtual string? Comment { get; set; }
@@ -22,7 +22,7 @@ namespace TodoTrack.Contracts
         public virtual long? ScheduledBeginTimestamp { get; set; }
         public virtual long? ScheduledDueTimestamp { get; set; }
         public virtual long? LatestWorkTimestamp { get; set; }
-        public virtual IList<long> NotifyTimestamps { get; set; } = default!;
+        public virtual IList<long> NotifyTimestamps { get; set; } = new List<long>();
         public virtual long? EstimatedDuration { get; set; }
         public virtual string? RepeatCron { get; set; }
         public virtual bool Repeatable { get; set; } = false;

@@ -12,7 +12,7 @@ namespace TodoTrack.Cli.Commands
     /// <summary>
     /// add a todo item to schedule today from system.
     /// </summary>
-    public class StartTodoCommand : AsyncCommand<TodoSettings>
+    public class StartTodoCommand : AsyncCommand<TodoIndexSettings>
     {
         private readonly TodoHolder _todoHolder;
 
@@ -21,7 +21,7 @@ namespace TodoTrack.Cli.Commands
             _todoHolder = todoHolder;
         }
 
-        public override async Task<int> ExecuteAsync(CommandContext context, TodoSettings settings)
+        public override async Task<int> ExecuteAsync(CommandContext context, TodoIndexSettings settings)
         {
             try
             {
