@@ -13,4 +13,16 @@ namespace TodoTrack.Cli.Commands
         [CommandArgument(0, "<TODOITEM_INDEX>")]
         public string[] IndexString { get; init; } = default!;
     }
+
+    public class PodoTodoSettings : CommandSettings
+    {
+        [CommandArgument(0, "<TODOITEM_INDEX>")]
+        public string IndexString { get; init; } = default!;
+
+        [CommandOption("-w|--work")]
+        public string WorkTime { get; init; } = default!;
+
+        [CommandOption("-r|--rest")]
+        public string RestTime { get; init; } = default!;
+    }
 }
