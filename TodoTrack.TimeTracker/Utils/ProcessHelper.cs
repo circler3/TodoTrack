@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace ForegroundTimeTracker.Utils
+namespace TimeTracker.Utils
 {
     public class ProcessHelper
     {

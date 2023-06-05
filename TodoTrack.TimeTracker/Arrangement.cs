@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TodoTrack.Contracts;
 
-namespace ForegroundTimeTracker
+namespace TimeTracker
 {
     public class Arrangement : IArrangement
     {

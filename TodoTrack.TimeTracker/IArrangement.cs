@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using TodoTrack.Contracts;
 
-namespace ForegroundTimeTracker
+namespace TimeTracker
 {
     public interface IArrangement
     {

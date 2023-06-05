@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using TodoTrack.Contracts;
 using TodoTrack.TodoDataSource;
 
-namespace ForegroundTimeTracker
+namespace TimeTracker
 {
     public class Program
     {

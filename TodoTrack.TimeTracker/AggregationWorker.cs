@@ -1,4 +1,4 @@
-﻿using ForegroundTimeTracker.Models;
+﻿using TimeTracker.Models;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ForegroundTimeTracker
+namespace TimeTracker
 {
     public class AggregationWorker : BackgroundService
     {
