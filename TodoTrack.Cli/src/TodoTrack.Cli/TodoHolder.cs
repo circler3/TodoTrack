@@ -111,6 +111,16 @@ namespace TodoTrack.Cli
             await GetAsync<TodoItem>();
         }
 
+        internal async Task StartpomodoroAsync(string id)
+        {
+            //currently podo is a client only procedure.
+        }
+
+        internal async Task StoppomodoroAsync()
+        {
+            //currently podo is a client only procedure.
+        }
+
         internal async Task FinishTodoItemAsync(IEnumerable<string> ids)
         {
             foreach (var id in ids)

@@ -12,7 +12,7 @@ namespace TodoTrack.Cli.Commands
     /// <summary>
     /// add a todo item to schedule today from system.
     /// </summary>
-    public class PodoTodoCommand : AsyncCommand<TodoIndexSettings>
+    public class PodoTodoCommand : AsyncCommand<PodoTodoSettings>
     {
         private readonly TodoHolder _todoHolder;
 
@@ -21,12 +21,20 @@ namespace TodoTrack.Cli.Commands
             _todoHolder = todoHolder;
         }
 
-        public override async Task<int> ExecuteAsync(CommandContext context, TodoIndexSettings settings)
+        public override async Task<int> ExecuteAsync(CommandContext context, PodoTodoSettings settings)
         {
             try
             {
-                List<string> strList = RangeHelper.GetMatchedStringList(settings.IndexString, _todoHolder.EntitySet<TodoItem>());
-                await _todoHolder.StartTodoItemAsync(strList);
+                if(settings.Stop ?? false) 
+                {
+                    await _todoHolder.StoppomodoroAsync();
+                    return 0;
+                }
+                if (settings.IndexString != null)
+                {
+                    List<string> strList = RangeHelper.GetMatchedStringList(new string[] { settings.IndexString }, _todoHolder.EntitySet<TodoItem>());
+                    await _todoHolder.StartpomodoroAsync(strList[0]);
+                }
             }
             catch (Exception e)
             {
