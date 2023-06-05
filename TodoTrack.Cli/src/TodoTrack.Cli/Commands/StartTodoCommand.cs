@@ -26,7 +26,7 @@ namespace TodoTrack.Cli.Commands
             try
             {
                 List<string> strList = RangeHelper.GetMatchedStringList(settings.IndexString, _todoHolder.EntitySet<TodoItem>());
-                await _todoHolder.StartTodoItemAsync(strList);
+                await _todoHolder.StartTodoItemAsync(strList[0]);
             }
             catch (Exception e)
             {

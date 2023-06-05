@@ -27,13 +27,15 @@ namespace TodoTrack.Cli.Commands
             {
                 if(settings.Stop ?? false) 
                 {
-                    await _todoHolder.StoppomodoroAsync();
+                    await _todoHolder.StopTodoItemAsync();
+                    await _todoHolder.StopPomodoroAsync();
                     return 0;
                 }
                 if (settings.IndexString != null)
                 {
                     List<string> strList = RangeHelper.GetMatchedStringList(new string[] { settings.IndexString }, _todoHolder.EntitySet<TodoItem>());
-                    await _todoHolder.StartpomodoroAsync(strList[0]);
+                    await _todoHolder.StartTodoItemAsync(strList[0]);
+                    await _todoHolder.StartPomodoroAsync(strList[0]);
                 }
             }
             catch (Exception e)

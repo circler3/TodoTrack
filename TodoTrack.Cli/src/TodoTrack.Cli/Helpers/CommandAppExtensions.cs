@@ -26,7 +26,6 @@ namespace TodoTrack.Cli.Helpers
                     {
                         add.SetDefaultCommand<NewTodoCommand>();
                         add.AddCommand<NewTodoCommand>("todo");
-                        //todo: build
                         add.AddCommand<NewProjectCommand>("project").WithAlias("pro");
                         //todo: build
                         add.AddCommand<NewTodoCommand>("tag");
@@ -35,8 +34,7 @@ namespace TodoTrack.Cli.Helpers
                     {
                         list.SetDefaultCommand<ListTodoCommand>();
                         list.AddCommand<ListTodoCommand>("todo");
-                        //todo: build
-                        list.AddCommand<ListTodoCommand>("project").WithAlias("pro");
+                        list.AddCommand<ListProjectCommand>("project").WithAlias("pro");
                         //todo: build
                         list.AddCommand<ListTodoCommand>("tag");
                     });

@@ -28,10 +28,12 @@ namespace TodoTrack.Cli.Commands
 
             try
             {
-                Project item = new();
-                //name
-                item.Name = settings.Name;
-                if(settings.Project != null) item.Parent = await _todoHolder.GetProjectFromNameAsync(settings.Project);
+                Project item = new()
+                {
+                    //name
+                    Name = settings.Name
+                };
+                if (settings.Project != null) item.Parent = _todoHolder.GetFromIndexOrName<Project>(settings.Project);
                 await _todoHolder.CreateAsync(item);
             }
             catch (Exception e)

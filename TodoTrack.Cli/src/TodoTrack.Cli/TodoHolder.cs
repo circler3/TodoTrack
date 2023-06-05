@@ -17,17 +17,19 @@ namespace TodoTrack.Cli
         private readonly Dictionary<Type, object> _repos;
         private readonly Dictionary<Type, IEnumerable<IEntity>> _set;
 
-        public TodoHolder(IRepo<TodoItem> todoRepo, IRepo<Project> projectRepo)
+        public TodoHolder(IRepo<TodoItem> todoRepo, IRepo<Project> projectRepo, IRepo<Tag> tagRepo)
         {
             _set = new()
             {
                 [GetEntityType(todoRepo)] = todoRepo.GetAsync().Result ?? throw new NullReferenceException(),
-                [GetEntityType(projectRepo)] = projectRepo.GetAsync().Result ?? throw new NullReferenceException()
+                [GetEntityType(projectRepo)] = projectRepo.GetAsync().Result ?? throw new NullReferenceException(),
+                [GetEntityType(tagRepo)] = tagRepo.GetAsync().Result ?? throw new NullReferenceException()
             };
             _repos = new()
             {
                 [GetEntityType(todoRepo)] = todoRepo ?? throw new NullReferenceException(),
-                [GetEntityType(projectRepo)] = projectRepo ?? throw new NullReferenceException()
+                [GetEntityType(projectRepo)] = projectRepo ?? throw new NullReferenceException(),
+                [GetEntityType(tagRepo)] = tagRepo ?? throw new NullReferenceException()
             };
         }
 
@@ -64,6 +66,19 @@ namespace TodoTrack.Cli
             return (await Repo<Project>().GetAsync()).SingleOrDefault(w => w.Id == value);
         }
 
+        internal T? GetFromIndexOrName<T>(string indexOrName)
+            where T : class, IEntity
+        {
+            if(int.TryParse(indexOrName, out var index))
+            {
+                return Set<T>()[index];
+            }
+            else
+            {
+                return Set<T>().FirstOrDefault(w=> w.Name == indexOrName);
+            }
+        }
+
         internal async Task AddTodayItemsAsync(IEnumerable<string> addIds)
         {
             foreach (var item in addIds)
@@ -90,33 +105,30 @@ namespace TodoTrack.Cli
             await GetAsync<TodoItem>();
         }
 
-        internal async Task StartTodoItemAsync(IEnumerable<string> ids)
+        internal async Task StartTodoItemAsync(string id)
         {
-            foreach (var id in ids)
-            {
-                var target = Set<TodoItem>().SingleOrDefault(w => id == w.Id);
-                var currentDateStamp = TimestampHelper.CurrentDateStamp;
+            var target = Set<TodoItem>().SingleOrDefault(w => id == w.Id);
+            var currentDateStamp = TimestampHelper.CurrentDateStamp;
 
-                if (target != null)
-                {
-                    target.LatestWorkTimestamp = currentDateStamp;
-                    target.Status = TodoStatus.InProgress;
-                    target.IsToday = true;
-                    target.IsFocus = true;
-                    target.TodoPeriods.Add(new WorkPeriod { StartTimestamp = currentDateStamp });
-                }
-                else
-                    Console.WriteLine("Invalid index. Cannot start Todo item");
+            if (target != null)
+            {
+                target.LatestWorkTimestamp = currentDateStamp;
+                target.Status = TodoStatus.InProgress;
+                target.IsToday = true;
+                target.IsFocus = true;
+                target.TodoPeriods.Add(new WorkPeriod { StartTimestamp = currentDateStamp });
             }
+            else
+                Console.WriteLine("Invalid index. Cannot start Todo item");
             await GetAsync<TodoItem>();
         }
 
-        internal async Task StartpomodoroAsync(string id)
+        internal async Task StartPomodoroAsync(string id)
         {
             //currently podo is a client only procedure.
         }
 
-        internal async Task StoppomodoroAsync()
+        internal async Task StopPomodoroAsync()
         {
             //currently podo is a client only procedure.
         }
@@ -165,6 +177,16 @@ namespace TodoTrack.Cli
             await GetAsync<TodoItem>();
         }
 
+        internal async Task StopTodoItemAsync()
+        {
+            var target = Set<TodoItem>().Where(w => w.IsFocus).OrderByDescending(w => w.LatestWorkTimestamp).FirstOrDefault();
+            if (target == null)
+            {
+                Console.WriteLine("Incorrect status");
+                return;
+            }
+            await StopTodoItemAsync(new[] { target.Id });
+        }
         internal async Task<TEntity> CreateAsync<TEntity>(TEntity item)
             where TEntity : class, IEntity
         {

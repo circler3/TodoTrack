@@ -41,9 +41,9 @@ public class CliHostedService : IHostedService
     public static string[] Parse(string commandLine)
     {
         // Split the command-line string into an array of strings
-        List<string> args = new List<string>();
+        List<string> args = new();
         bool insideQuotes = false;
-        StringBuilder currentArg = new StringBuilder();
+        StringBuilder currentArg = new();
 
         for (int i = 0; i < commandLine.Length; i++)
         {

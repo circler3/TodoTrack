@@ -49,7 +49,7 @@ namespace TodoTrack.Cli
                 string color = "purple";
                 List<string> sb = new()
                     {
-                        $"[green]{items[i].Id}[/]",
+                        $"[green]{i}[/]",
                         $"[{color}]{items[i].Name}[/]",
                         $"[{color}]{items[i].Parent?.Name ?? "null"}[/]"
                     };
@@ -58,6 +58,30 @@ namespace TodoTrack.Cli
 
             AnsiConsole.Write(table);
         }
+
+        public static void BuildTagTable(IList<Tag> items, string title = "")
+        {
+            var table = new Table();
+            if (!string.IsNullOrWhiteSpace(title)) table.Title = new TableTitle(title.Trim());
+
+            table.AddColumn("Index");
+            table.AddColumn("Name");
+            table.AddColumn("Project");
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                string color = "purple";
+                List<string> sb = new()
+                    {
+                        $"[green]{i}[/]",
+                        $"[{color}]{items[i].Name}[/]",
+                    };
+                table.AddRow(sb.ToArray());
+            }
+
+            AnsiConsole.Write(table);
+        }
+
 
         internal static void BuildTable<T>(IList<T> ts, string v)
             where T: class, IEntity
