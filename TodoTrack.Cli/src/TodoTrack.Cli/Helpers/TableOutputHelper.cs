@@ -24,9 +24,9 @@ namespace TodoTrack.Cli
                     {
                         items[i].IsFocus ? "[red]>[/]" : "",
                         $"[green]{i}[/]",
-                        $"[{color}]{items[i].Name}[/]",
+                        $"[{color}]{items[i].Name.EscapeMarkup()}[/]",
                         $"[{color}]{items[i].Status}[/]",
-                        $"[{color}]{items[i].Project?.Name ?? "null"}[/]"
+                        $"[{color}]{items[i].Project?.Name.EscapeMarkup() ?? "null"}[/]"
                     };
                 table.AddRow(sb.ToArray());
             }
@@ -50,8 +50,8 @@ namespace TodoTrack.Cli
                 List<string> sb = new()
                     {
                         $"[green]{i}[/]",
-                        $"[{color}]{items[i].Name}[/]",
-                        $"[{color}]{items[i].Parent?.Name ?? "null"}[/]"
+                        $"[{color}]{items[i].Name.EscapeMarkup()}[/]",
+                        $"[{color}]{items[i].Parent?.Name.EscapeMarkup() ?? "null"}[/]"
                     };
                 table.AddRow(sb.ToArray());
             }
@@ -74,7 +74,7 @@ namespace TodoTrack.Cli
                 List<string> sb = new()
                     {
                         $"[green]{i}[/]",
-                        $"[{color}]{items[i].Name}[/]",
+                        $"[{color}]{items[i].Name.EscapeMarkup()}[/]",
                     };
                 table.AddRow(sb.ToArray());
             }

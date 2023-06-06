@@ -5,9 +5,10 @@ namespace TodoTrack.TodoDataSource
     /// <summary>
     /// this is temporary use case.
     /// </summary>
-    public class TagSourceRepo : IRepo<Tag>
+    public class TagSourceRepo : IRepo<Tag>, IDisposable
     {
         private readonly TodoDbContext _dbContext;
+        
         public TagSourceRepo()
         {
             _dbContext = new TodoDbContext();
@@ -30,6 +31,17 @@ namespace TodoTrack.TodoDataSource
             _dbContext.Tags.Remove(item);
             await _dbContext.SaveChangesAsync(true);
             return true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing) _dbContext?.Dispose();
         }
 
         public async Task<IQueryable<Tag>> GetAsync()

@@ -38,6 +38,17 @@ namespace TodoTrack.TodoDataSource
             return true;
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing) _dbContext?.Dispose();
+        }
+
         public async Task<IQueryable<TodoItem>> GetAsync()
         {
             return await Task.FromResult(_dbContext.TodoItems);

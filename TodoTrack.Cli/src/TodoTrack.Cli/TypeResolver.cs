@@ -8,7 +8,7 @@ namespace TodoTrack.Cli
 
     public sealed class TypeResolver : ITypeResolver, IDisposable
     {
-        private readonly IServiceProvider _provider;
+        private IServiceProvider? _provider;
 
         public TypeResolver(IServiceProvider provider)
         {
@@ -22,7 +22,7 @@ namespace TodoTrack.Cli
                 return null;
             }
 
-            return _provider.GetService(type);
+            return _provider?.GetService(type);
         }
 
         /// <summary>
@@ -33,6 +33,7 @@ namespace TodoTrack.Cli
             if (_provider is IDisposable disposable)
             {
                 disposable.Dispose();
+                _provider = null;
             }
         }
     }

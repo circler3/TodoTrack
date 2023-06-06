@@ -8,6 +8,7 @@ namespace TodoTrack.TodoDataSource
     public class ProcessPeriodSourceRepo : IRepo<ProcessPeriod>
     {
         private readonly TodoDbContext _dbContext;
+
         public ProcessPeriodSourceRepo()
         {
             _dbContext = new TodoDbContext();
@@ -44,6 +45,24 @@ namespace TodoTrack.TodoDataSource
             _dbContext.Entry(target).CurrentValues.SetValues(item);
             await _dbContext.SaveChangesAsync();
             return target;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_dbContext != null)
+                {
+                    _dbContext.Dispose();
+                    //_dbContext = null;
+                }
+            }
         }
     }
 }

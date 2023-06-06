@@ -46,7 +46,7 @@ public class Program
                     options.Services.AddScoped<IRepo<Tag>, TagSourceRepo>();
                     options.Services.AddScoped<IRepo<Project>, ProjectSourceRepo>();
                     options.Services.AddScoped<IRepo<ProcessPeriod>, ProcessPeriodSourceRepo>();
-                    options.Services.AddScoped<TodoHolder>();
+                    options.Services.AddSingleton<TodoHolder>();
                     services.AddCommandApp();
                 });
             }).AddAppSettingsSecretsJson().UseAutofac().UseConsoleLifetime();

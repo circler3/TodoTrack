@@ -14,9 +14,9 @@ namespace TodoTrack.Cli
 {
     //TODO: should be configured via interface and be divided into several smaller services
     // this service is scoped
-    public class TodoHolder
+    public class TodoHolder 
     {
-        private readonly Dictionary<Type, object> _repos;
+        //private readonly Dictionary<Type, object> _repos;
         private readonly Dictionary<Type, IEnumerable<IEntity>> _set;
         private readonly IServiceScopeFactory _scopeFactory;
 
@@ -24,16 +24,16 @@ namespace TodoTrack.Cli
         {
             _set = new()
             {
-                [GetEntityType(todoRepo)] = todoRepo.GetAsync().Result ?? throw new NullReferenceException(),
-                [GetEntityType(projectRepo)] = projectRepo.GetAsync().Result ?? throw new NullReferenceException(),
-                [GetEntityType(tagRepo)] = tagRepo.GetAsync().Result ?? throw new NullReferenceException()
+                [GetEntityType(todoRepo)] = todoRepo.GetAsync().Result.ToList() ?? throw new NullReferenceException(),
+                [GetEntityType(projectRepo)] = projectRepo.GetAsync().Result.ToList() ?? throw new NullReferenceException(),
+                [GetEntityType(tagRepo)] = tagRepo.GetAsync().Result.ToList() ?? throw new NullReferenceException()
             };
-            _repos = new()
-            {
-                [GetEntityType(todoRepo)] = todoRepo ?? throw new NullReferenceException(),
-                [GetEntityType(projectRepo)] = projectRepo ?? throw new NullReferenceException(),
-                [GetEntityType(tagRepo)] = tagRepo ?? throw new NullReferenceException()
-            };
+            //_repos = new()
+            //{
+            //    [GetEntityType(todoRepo)] = todoRepo ?? throw new NullReferenceException(),
+            //    [GetEntityType(projectRepo)] = projectRepo ?? throw new NullReferenceException(),
+            //    [GetEntityType(tagRepo)] = tagRepo ?? throw new NullReferenceException()
+            //};
             _scopeFactory = scopeFactory;
         }
 
@@ -66,10 +66,6 @@ namespace TodoTrack.Cli
             return _set[typeof(T)].OfType<T>().ToList();
         }
 
-        internal async Task<Project?> GetProjectFromNameAsync(string value)
-        {
-            return (await Repo<Project>().GetAsync()).SingleOrDefault(w => w.Id == value);
-        }
 
         internal T? GetFromIndexOrName<T>(string indexOrName)
             where T : class, IEntity
@@ -195,31 +191,38 @@ namespace TodoTrack.Cli
         internal async Task<TEntity> CreateAsync<TEntity>(TEntity item)
             where TEntity : class, IEntity
         {
-            var result = await Repo<TEntity>().CreateAsync(item);
-            await GetAsync<TEntity>();
+            using var repo = Repo<TEntity>();
+            var result = await repo.CreateAsync(item);
+            var res = await repo.GetAsync();
+            _set[typeof(TEntity)] = res.ToList();
             return result;
         }
 
         internal async Task<IQueryable<TEntity>> GetAsync<TEntity>()
     where TEntity : class, IEntity
         {
-            var result = await Repo<TEntity>().GetAsync();
-            _set[typeof(TEntity)] = result;
-            return result;
+            using var repo = Repo<TEntity>();
+            var result = await repo.GetAsync();
+            var p = result.ToList();
+            _set[typeof(TEntity)] = p;
+            return p.AsQueryable();
         }
         internal async Task<TEntity?> UpdateAsync<TEntity>(TEntity entity)
     where TEntity : class, IEntity
         {
-            return await Repo<TEntity>().UpdateAsync(entity.Id, entity);
+            using var repo = Repo<TEntity>();
+            return await repo.UpdateAsync(entity.Id, entity);
         }
 
         internal async Task DeleteAsync<TEntity>(IEnumerable<string> deleteIds)
     where TEntity : class, IEntity
         {
+            using var repo = Repo<TEntity>();
             foreach (var item in deleteIds)
             {
-                await Repo<TEntity>().DeleteAsync(item);
+                await repo.DeleteAsync(item);
             }
         }
+
     }
 }

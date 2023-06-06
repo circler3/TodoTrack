@@ -8,6 +8,7 @@ namespace TodoTrack.TodoDataSource
     public class ProjectSourceRepo : IRepo<Project>
     {
         private readonly TodoDbContext _dbContext;
+
         public ProjectSourceRepo()
         {
             _dbContext = new();
@@ -27,7 +28,7 @@ namespace TodoTrack.TodoDataSource
         {
             var item = _dbContext.Projects.Find(id);
             if (item == null) return false;
-            
+
             _dbContext.Projects.Remove(item);
             await _dbContext.SaveChangesAsync(true);
             return true;
@@ -45,6 +46,17 @@ namespace TodoTrack.TodoDataSource
             _dbContext.Entry(target).CurrentValues.SetValues(item);
             await _dbContext.SaveChangesAsync();
             return target;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing) _dbContext?.Dispose();
         }
     }
 }

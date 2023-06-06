@@ -1,6 +1,6 @@
 ﻿namespace TodoTrack.Contracts
 {
-    public interface IRepo<T>
+    public interface IRepo<T> : IDisposable
         where T : class, IEntity
     {
         Task<IQueryable<T>> GetAsync();
