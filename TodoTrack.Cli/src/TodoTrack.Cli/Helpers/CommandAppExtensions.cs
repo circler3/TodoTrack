@@ -7,8 +7,10 @@ namespace TodoTrack.Cli.Helpers
 {
     internal static class CommandAppExtensions
     {
+        // pay additional attention to commands. They registered as singleton
         internal static IServiceCollection AddCommandApp(this IServiceCollection services)
         {
+            //TODO: solve memory leak of the singleton instance after terminate
             return services.AddSingleton(w =>
             {
                 var app = new CommandApp(new TypeRegistrar(services));

@@ -27,6 +27,7 @@ namespace TodoTrack.TodoDataSource
         {
             var item = _dbContext.Projects.Find(id);
             if (item == null) return false;
+            
             _dbContext.Projects.Remove(item);
             await _dbContext.SaveChangesAsync(true);
             return true;

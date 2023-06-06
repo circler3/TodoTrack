@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -11,13 +12,15 @@ using TodoTrack.Contracts;
 
 namespace TodoTrack.Cli
 {
-    //TODO: should be configured via interface
+    //TODO: should be configured via interface and be divided into several smaller services
+    // this service is scoped
     public class TodoHolder
     {
         private readonly Dictionary<Type, object> _repos;
         private readonly Dictionary<Type, IEnumerable<IEntity>> _set;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public TodoHolder(IRepo<TodoItem> todoRepo, IRepo<Project> projectRepo, IRepo<Tag> tagRepo)
+        public TodoHolder(IServiceScopeFactory scopeFactory, IRepo<TodoItem> todoRepo, IRepo<Project> projectRepo, IRepo<Tag> tagRepo)
         {
             _set = new()
             {
@@ -31,6 +34,7 @@ namespace TodoTrack.Cli
                 [GetEntityType(projectRepo)] = projectRepo ?? throw new NullReferenceException(),
                 [GetEntityType(tagRepo)] = tagRepo ?? throw new NullReferenceException()
             };
+            _scopeFactory = scopeFactory;
         }
 
         private static Type GetEntityType(object obj)
@@ -44,7 +48,8 @@ namespace TodoTrack.Cli
         private IRepo<T> Repo<T>()
             where T : class, IEntity
         {
-            return (IRepo<T>)_repos[typeof(T)];
+            return _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IRepo<T>>();
+            //return (IRepo<T>)_repos[typeof(T)];
         }
 
         public IEnumerable<IEntity> EntitySet<T>()

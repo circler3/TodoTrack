@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using Spectre.Console.Cli;
 using TodoTrack.Cli.Helpers;
 using TodoTrack.Contracts;
 using TodoTrack.TodoDataSource;
@@ -41,11 +42,11 @@ public class Program
                     options.Services.ReplaceConfiguration(services.GetConfiguration());
                     options.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
 
-                    options.Services.AddTransient<IRepo<TodoItem>, TodoSourceRepo>();
-                    options.Services.AddTransient<IRepo<Tag>, TagSourceRepo>();
-                    options.Services.AddTransient<IRepo<Project>, ProjectSourceRepo>();
-                    options.Services.AddTransient<IRepo<ProcessPeriod>, ProcessPeriodSourceRepo>();
-                    options.Services.AddSingleton<TodoHolder>();
+                    options.Services.AddScoped<IRepo<TodoItem>, TodoSourceRepo>();
+                    options.Services.AddScoped<IRepo<Tag>, TagSourceRepo>();
+                    options.Services.AddScoped<IRepo<Project>, ProjectSourceRepo>();
+                    options.Services.AddScoped<IRepo<ProcessPeriod>, ProcessPeriodSourceRepo>();
+                    options.Services.AddScoped<TodoHolder>();
                     services.AddCommandApp();
                 });
             }).AddAppSettingsSecretsJson().UseAutofac().UseConsoleLifetime();

@@ -8,6 +8,7 @@ namespace TodoTrack.Cli
     {
         private readonly IServiceCollection _builder;
         private ITypeResolver? _typeResolver;
+        private IServiceProvider _serviceProvider;
 
         public TypeRegistrar(IServiceCollection builder)
         {
@@ -16,7 +17,9 @@ namespace TodoTrack.Cli
 
         public ITypeResolver Build()
         {
-            return _typeResolver ??= new TypeResolver(_builder.BuildServiceProvider());
+            _serviceProvider ??= _builder.BuildServiceProvider();
+            return new TypeResolver(_serviceProvider.CreateScope().ServiceProvider);
+            //return _typeResolver ??= new TypeResolver(_builder.BuildServiceProvider());
         }
 
         public void Register(Type service, Type implementation)

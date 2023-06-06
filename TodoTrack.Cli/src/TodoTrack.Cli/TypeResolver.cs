@@ -1,5 +1,7 @@
 ﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
+using SQLitePCL;
 
 namespace TodoTrack.Cli
 {
@@ -28,10 +30,10 @@ namespace TodoTrack.Cli
         /// </summary>
         public void Dispose()
         {
-            //if (_provider is IDisposable disposable)
-            //{
-            //    disposable.Dispose();
-            //}
+            if (_provider is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
         }
     }
 }

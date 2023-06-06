@@ -18,6 +18,12 @@ namespace TodoTrack.TodoDataSource
         public async Task<TodoItem> CreateAsync(TodoItem item)
         {
             item.Id = Guid.NewGuid().ToString();
+            if (item.Project !=null) item.Project = _dbContext.Projects.Find(item.Project.Id);
+            if(item.Tags != null)
+            {
+                var tagIds = item.Tags.Select(t => t.Id);
+                item.Tags = _dbContext.Tags.Where(v => tagIds.Contains(v.Id)).ToList();
+            }
             _dbContext.TodoItems.Add(item);
             await _dbContext.SaveChangesAsync();
             return item;
