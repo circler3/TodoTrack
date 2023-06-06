@@ -35,15 +35,11 @@ namespace TodoTrack.TodoDataSource
                 v => v.Split(',', StringSplitOptions.None).ToList()
             );
             modelBuilder.Entity<TodoItem>().Property(x=>x.TodoPeriods).HasConversion(
-                v => string.Join(',', v.Select(w=> WorkPeriodConverter.ConvertToString(w))),
-                v => v.Split(',', StringSplitOptions.None)
-                .Select(w=> WorkPeriodConverter.Parse(w)).ToList()
-            );
+                v => string.Join(',', WorkPeriodConverter.ConvertToString(v)),
+                v => WorkPeriodConverter.ParseFromString(v));
             modelBuilder.Entity<TodoItem>().Property(x=>x.ProcessPeriods).HasConversion(
-                v => string.Join(',', v.Select(w=> WorkPeriodConverter.ConvertToString(w))),
-                v => v.Split(',', StringSplitOptions.None)
-                .Select(w=> WorkPeriodConverter.Parse(w)).ToList()
-            );
+                v => string.Join(',', WorkPeriodConverter.ConvertToString(v)),
+                v => WorkPeriodConverter.ParseFromString(v));
         }
         public DbSet<ProcessPeriod> ProcessPeriods { get; set; } = default!;
         public DbSet<TodoItem> TodoItems { get; set; } = default!;
