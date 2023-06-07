@@ -22,7 +22,7 @@ namespace TodoTrack.Contracts
         public virtual long? ScheduledBeginTimestamp { get; set; }
         public virtual long? ScheduledDueTimestamp { get; set; }
         public virtual long? LatestWorkTimestamp { get; set; }
-        public virtual IList<long> NotifyTimestamps { get; set; } = new List<long>();
+        public virtual IList<long>? NotifyTimestamps { get; set; }
         public virtual long? EstimatedDuration { get; set; }
         public virtual string? RepeatCron { get; set; }
         public virtual bool Repeatable { get; set; } = false;
